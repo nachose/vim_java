@@ -20,6 +20,7 @@ import com.googlecode.lanterna.terminal.Terminal;
 public class LanternaCliTest {
 
   public static void main(String[] args) throws Exception {
+    System.setProperty("java.awt.headless", "true");
     new LanternaCliTest().testWindow();
   }
 
