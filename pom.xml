@@ -82,7 +82,7 @@
               <manifest>
                 <addClasspath>true</addClasspath>
                 <classpathPrefix>lib/</classpathPrefix>
-                <mainClass>com.jiss.app.App</mainClass>
+                <mainClass>com.jiss.app.VimJava</mainClass>
               </manifest>
             </archive>
           </configuration>

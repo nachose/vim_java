@@ -33,5 +33,8 @@ public class LanternaFirst
           new EmptySpace(TextColor.ANSI.BLACK));
       gui.setTheme(LanternaThemes.getRegisteredTheme("businessmachine"));
       gui.addWindowAndWait(window);
+
   }
 }
+
+
