@@ -1,4 +1,4 @@
-package com.jiss.app;
+package com.jiss.app.unit_test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
