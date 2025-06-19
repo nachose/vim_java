@@ -8,4 +8,5 @@ of just the first letter. Implement the two lines in the bottom: a status line a
 for each paragraph, or maybe use a flyweight pattern.
 - Continue with the rest of the features copilot suggested:
  (file I/O, more commands, multi-line support, etc.)
-
+- Get rid of LoopStatus, and comeback to returning just a boolean. It is not needed, we will keep track
+of the state (mode) in KeyHandler.

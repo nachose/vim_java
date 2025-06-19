@@ -1,25 +1,25 @@
 package com.jiss.app;
 
-enum EditorMode {
-    NORMAL(){
+public enum EditorMode {
+    NORMAL{
         @Override
         public String getModeStr() {
             return "NORMAL";
         }
     },
-    INSERT() {
+    INSERT {
         @Override
         public String getModeStr() {
             return "INSERT";
         }
     },
-    VISUAL() {
+    VISUAL {
         @Override
         public String getModeStr() {
             return "VISUAL";
         }
     },
-    COMMAND() {
+    COMMAND {
         @Override
         public String getModeStr() {
             return "COMMAND";

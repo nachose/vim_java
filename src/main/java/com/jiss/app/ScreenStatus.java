@@ -34,6 +34,4 @@ public class ScreenStatus {
         return screen_;
     }
 
-
-
 }
