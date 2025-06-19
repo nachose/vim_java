@@ -1,6 +1,5 @@
-package com.jiss.app;
+package com.jiss.app.test;
 
-import com.jiss.app.LanternaFirst;
 import java.io.IOException;
 
 /**

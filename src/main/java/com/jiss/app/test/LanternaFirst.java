@@ -1,4 +1,4 @@
-package com.jiss.app;
+package com.jiss.app.test;
 
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.bundle.LanternaThemes;

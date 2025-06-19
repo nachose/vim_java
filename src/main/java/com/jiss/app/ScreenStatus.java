@@ -6,7 +6,7 @@ public class ScreenStatus {
 
     private int cursorX_;
     private int cursorY_;
-    private Screen screen_;
+    private final Screen screen_;
 
     public ScreenStatus (Screen screen) {
         screen_ = screen;
@@ -34,8 +34,6 @@ public class ScreenStatus {
         return screen_;
     }
 
-    public void setScreen(Screen screen) {
-        this.screen_ = screen;
-    }
+
 
 }
