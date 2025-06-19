@@ -3,7 +3,9 @@ TODO
 - Change from vim keybindings to helix keybindings.
 - Display in full screen, instead of a window.
 - Change the mode indicator, which is in the first line, to the last one, displaying the full mode instead
-of just the first letter.
+of just the first letter. Implement the two lines in the bottom: a status line and a command line.
+- Investigate of the options for not having each character use an object. Either use something for each line or
+for each paragraph, or maybe use a flyweight pattern.
 - Continue with the rest of the features copilot suggested:
  (file I/O, more commands, multi-line support, etc.)
 

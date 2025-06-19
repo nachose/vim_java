@@ -20,15 +20,35 @@ public class VimJava {
             StringBuilder buffer = new StringBuilder();
             boolean insertMode = false;
             TerminalPosition pos = new TerminalPosition(cursorX, cursorY);
+            int height = screen.getTerminalSize().getRows();
+            int width = screen.getTerminalSize().getColumns();
+            StringBuilder commandBuffer = new StringBuilder();
 
             while (running) {
                 screen.clear();
-                screen.setCharacter(0, 0, TextCharacter.fromCharacter(
-                        insertMode ? 'I' : 'N', TextColor.ANSI.WHITE, TextColor.ANSI.BLACK)[0]);
-                for (int i = 0; i < buffer.length(); i++) {
+
+                // Draw buffer (avoid last two lines)
+                for (int i = 0; i < buffer.length() && i < height - 2; i++) {
                     screen.setCharacter(i, 1, TextCharacter.fromCharacter(
                             buffer.charAt(i), TextColor.ANSI.WHITE, TextColor.ANSI.BLACK)[0]);
                 }
+
+                // Draw status line
+                String status = "NORMAL"; // or INSERT, etc.
+                for (int col = 0; col < width; col++) {
+                    char ch = col < status.length() ? status.charAt(col) : ' ';
+                    screen.setCharacter(col, height - 2, TextCharacter.fromCharacter(
+                            ch, TextColor.ANSI.WHITE, TextColor.ANSI.BLACK_BRIGHT)[0]);
+                }
+
+                // Draw command line
+                String commandPrompt = ":" + commandBuffer.toString();
+                for (int col = 0; col < width; col++) {
+                    char ch = col < commandPrompt.length() ? commandPrompt.charAt(col) : ' ';
+                    screen.setCharacter(col, height - 1, TextCharacter.fromCharacter(
+                            ch, TextColor.ANSI.WHITE, TextColor.ANSI.BLACK)[0]);
+                }
+
                 pos.withRow(cursorY + 1).withColumn(cursorX);
                 screen.setCursorPosition(pos);
                 screen.refresh();

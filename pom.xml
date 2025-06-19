@@ -185,7 +185,7 @@
               <archive>
                 <manifest>
                   <addClasspath>true</addClasspath>
-                  <mainClass>com.jiss.app.App</mainClass>
+                  <mainClass>com.jiss.app.VimJava</mainClass>
                 </manifest>
               </archive>
               <descriptorRefs>
