@@ -20,3 +20,17 @@ jobs:
         run: mvn checkstyle:check
       - name: Run PMD CPD
         run: mvn pmd:cpd-check
+      - name: Upload PMD report
+        uses: actions/upload-artifact@v4
+        with:
+          name: pmd-report
+          path: target/pmd.xml
+      - name: Upload CPD report
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpd-report
+          path: target/cpd.xml
+      - name: Display PMD report
+        run: cat target/pmd.xml
+      - name: Display CPD report
+        run: cat target/cpd.xml
