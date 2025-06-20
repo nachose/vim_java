@@ -22,9 +22,6 @@ public class InsertModeHandler implements KeyInputHandler {
         } else if (key.getKeyType() == KeyType.Backspace && pos.cursorX() > 0) {
             buffer.deleteCharAt(pos.cursorX() - 1);
             pos = new ScreenStatus.Position(pos.cursorX() -1, pos.cursorY());
-        } else if (key.getKeyType() == KeyType.Backspace && pos.cursorX() > 0) {
-            buffer.deleteCharAt(pos.cursorX() - 1);
-            pos = new ScreenStatus.Position(pos.cursorX() - 1, pos.cursorY());
         } else if (key.getKeyType() == KeyType.Character ) {
             buffer.insert(pos.cursorX(), key.getCharacter());
             pos = new ScreenStatus.Position(pos.cursorX() + 1, pos.cursorY());

@@ -25,7 +25,8 @@ public class VimJava {
             boolean running = true;
             StringBuilder buffer = new StringBuilder();
             TerminalPosition pos =
-                    new TerminalPosition(screenStatus.getCursorX(), screenStatus.getCursorY());
+                    new TerminalPosition(screenStatus.getPosition().cursorX(),
+                                         screenStatus.getPosition().cursorY());
             StringBuilder commandBuffer = new StringBuilder();
 
             while (running) {
@@ -48,7 +49,8 @@ public class VimJava {
     }
 
     private static void updateCursorPosition(TerminalPosition pos, ScreenStatus screenStatus, Screen screen) {
-        pos.withRow(screenStatus.getCursorY()).withColumn(screenStatus.getCursorX());
+        pos.withRow(screenStatus.getPosition().cursorX())
+           .withColumn(screenStatus.getPosition().cursorY());
         screen.setCursorPosition(pos);
     }
 
@@ -96,8 +98,13 @@ public class VimJava {
         // Draw buffer (avoid last two lines)
         int height = screen.getTerminalSize().getRows();
         int width = screen.getTerminalSize().getColumns();
+        int line = 0;
         for (int i = 0; i < buffer.length() && i < height - 2; i++) {
-            screen.setCharacter(i, 1, TextCharacter.fromCharacter(
+            if (buffer.charAt(i) == '\n') {
+                line++;
+                continue; // Skip newline characters
+            }
+            screen.setCharacter(i, line, TextCharacter.fromCharacter(
                     buffer.charAt(i), TextColor.ANSI.WHITE, TextColor.ANSI.BLACK)[0]);
         }
     }

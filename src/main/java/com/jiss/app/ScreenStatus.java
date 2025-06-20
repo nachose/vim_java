@@ -18,21 +18,25 @@ public class ScreenStatus {
         return pos_;
     }
 
-    public int getCursorX() {
-        return pos_.cursorX();
+    public void setPosition(Position pos) {
+        pos_ = pos;
     }
 
-    public void setCursorX(int cursorX) {
-        this.pos_ = new Position(cursorX, pos_.cursorY());
-    }
+    // public int getCursorX() {
+    //     return pos_.cursorX();
+    // }
 
-    public int getCursorY() {
-        return pos_.cursorY();
-    }
+    // public void setCursorX(int cursorX) {
+    //     this.pos_ = new Position(cursorX, pos_.cursorY());
+    // }
 
-    public void setCursorY(int cursorY) {
-        this.pos_ = new Position(pos_.cursorX(), cursorY);
-    }
+    // public int getCursorY() {
+    //     return pos_.cursorY();
+    // }
+
+    // public void setCursorY(int cursorY) {
+    //     this.pos_ = new Position(pos_.cursorX(), cursorY);
+    // }
 
     public Screen getScreen() {
         return screen_;
