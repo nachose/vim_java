@@ -2,32 +2,36 @@ package com.jiss.app;
 
 import com.googlecode.lanterna.screen.Screen;
 
+
 public class ScreenStatus {
 
-    private int cursorX_;
-    private int cursorY_;
+    public record Position(int cursorX, int cursorY) {};
+    private Position pos_;
     private final Screen screen_;
 
     public ScreenStatus (Screen screen) {
         screen_ = screen;
-        cursorX_ = 0;
-        cursorY_ = 0;
+        pos_ = new Position(0,0);
+    }
+
+    public Position getPosition () {
+        return pos_;
     }
 
     public int getCursorX() {
-        return cursorX_;
+        return pos_.cursorX();
     }
 
     public void setCursorX(int cursorX) {
-        this.cursorX_ = cursorX;
+        this.pos_ = new Position(cursorX, pos_.cursorY());
     }
 
     public int getCursorY() {
-        return cursorY_;
+        return pos_.cursorY();
     }
 
     public void setCursorY(int cursorY) {
-        this.cursorY_ = cursorY;
+        this.pos_ = new Position(pos_.cursorX(), cursorY);
     }
 
     public Screen getScreen() {

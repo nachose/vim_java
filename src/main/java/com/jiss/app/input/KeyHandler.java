@@ -1,7 +1,6 @@
 package com.jiss.app.input;
 
 import com.jiss.app.EditorMode;
-import com.jiss.app.LoopStatus;
 import com.jiss.app.ScreenStatus;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
@@ -9,7 +8,7 @@ import com.googlecode.lanterna.input.KeyType;
 import java.io.IOException;
 import java.util.TreeMap;
 
-public class KeyHandler implements KeyInputHandler {
+public class KeyHandler {
 
     private EditorMode mode_;
     private static TreeMap<EditorMode, KeyInputHandler> modesMap_ = new TreeMap<>();
@@ -18,13 +17,20 @@ public class KeyHandler implements KeyInputHandler {
         modesMap_.put(EditorMode.INSERT, new InsertModeHandler());
         modesMap_.put(EditorMode.COMMAND, new CommandModeHandler());
         modesMap_.put(EditorMode.VISUAL, new VisualModeHandler());
+        modesMap_.put(EditorMode.VISUALLINE, new VisualModeHandler());
         modesMap_.put(EditorMode.NORMAL, new NormalModeHandler());
     }
 
-    @Override
-    public LoopStatus handleTextInput(ScreenStatus screen, StringBuilder commandBuffer, StringBuilder buffer) throws IOException {
+    public boolean handleTextInput(ScreenStatus screen, StringBuilder commandBuffer, StringBuilder buffer) throws IOException {
         boolean running = true;
         KeyStroke key = screen.getScreen().readInput();
+        KeyInputHandler handler = modesMap_.get(mode_);
+
+        LoopStatus status = handler.handleTextInput(screen.getPosition(), key, commandBuffer, buffer);
+
+        mode_ = status.mode();
+
+        /*
         if (key.getKeyType() == KeyType.Escape) {
             mode_ = EditorMode.NORMAL;
         } else if (key.getKeyType() == KeyType.Character && mode_ != EditorMode.INSERT && key.getCharacter() == 'i') {
@@ -52,7 +58,8 @@ public class KeyHandler implements KeyInputHandler {
         } else if (key.getKeyType() == KeyType.EOF) {
             running = false;
         }
+         */
 
-        return new LoopStatus(running, mode_);
+        return status.running();
     }
 }

@@ -41,8 +41,7 @@ public class VimJava {
 
                 refreshScreen(screen);
 
-                LoopStatus status = handleTextInput(screenStatus, commandBuffer, buffer);
-                running = status.running();
+                running = handleTextInput(screenStatus, commandBuffer, buffer);
             }
             screen.stopScreen();
         }
@@ -61,7 +60,7 @@ public class VimJava {
         screen.refresh();
     }
 
-    private static LoopStatus handleTextInput(ScreenStatus screen,
+    private static boolean handleTextInput(ScreenStatus screen,
                                            StringBuilder commandBuffer,
                                            StringBuilder buffer) throws IOException {
 
