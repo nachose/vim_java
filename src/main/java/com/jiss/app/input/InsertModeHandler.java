@@ -32,6 +32,10 @@ public class InsertModeHandler implements KeyInputHandler {
             pos = new ScreenStatus.Position(pos.cursorX() - 1, pos.cursorY());
         } else if (key.getKeyType() == KeyType.ArrowRight && pos.cursorX() < buffer.length()) {
             pos = new ScreenStatus.Position(pos.cursorX() + 1, pos.cursorY());
+        } else if( key.getKeyType() == KeyType.Enter ) {
+            // Handle Enter key in insert mode, e.g., add a newline
+            buffer.insert(pos.cursorX(), '\n');
+            pos = new ScreenStatus.Position(0, pos.cursorY() + 1); // Move cursor to next line
         } else if (key.getKeyType() == KeyType.EOF) {
             running = false;
         }

@@ -1,8 +1,5 @@
 package com.jiss.app;
 
-import java.awt.image.VolatileImage;
-import java.beans.Visibility;
-import java.awt.image.VolatileImage;
 
 public enum EditorMode {
     NORMAL{
