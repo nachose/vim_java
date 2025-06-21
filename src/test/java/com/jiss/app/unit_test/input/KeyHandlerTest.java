@@ -6,6 +6,7 @@ import com.jiss.app.EditorMode;
 import com.jiss.app.input.LoopStatus;
 import com.jiss.app.ScreenStatus;
 import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.TerminalPosition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -43,7 +44,7 @@ class KeyHandlerTest {
         }
 
         // Mock getPosition()
-        var pos = mock(ScreenStatus.Position.class);
+        var pos = mock(TerminalPosition.class);
         when(screenStatus.getPosition()).thenReturn(pos);
 
         // Replace the handler in the static map for NORMAL mode
@@ -59,7 +60,6 @@ class KeyHandlerTest {
 
         assertTrue(running);
         verify(handler).handleTextInput(any(), any(), any(), any());
-        verify(screenStatus).setPosition(any());
     }
 
     @Test

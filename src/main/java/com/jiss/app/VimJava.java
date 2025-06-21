@@ -25,8 +25,8 @@ public class VimJava {
             boolean running = true;
             StringBuilder buffer = new StringBuilder();
             TerminalPosition pos =
-                    new TerminalPosition(screenStatus.getPosition().cursorX(),
-                                         screenStatus.getPosition().cursorY());
+                    new TerminalPosition(screenStatus.getPosition().getColumn(),
+                                         screenStatus.getPosition().getRow());
             StringBuilder commandBuffer = new StringBuilder();
 
             while (running) {
@@ -49,8 +49,8 @@ public class VimJava {
     }
 
     private static void updateCursorPosition(TerminalPosition pos, ScreenStatus screenStatus, Screen screen) {
-        pos.withRow(screenStatus.getPosition().cursorX())
-           .withColumn(screenStatus.getPosition().cursorY());
+        pos.withRow(screenStatus.getPosition().getColumn())
+           .withColumn(screenStatus.getPosition().getRow());
         screen.setCursorPosition(pos);
     }
 
@@ -97,14 +97,16 @@ public class VimJava {
     private static void drawBuffer(Screen screen, StringBuilder buffer) {
         // Draw buffer (avoid last two lines)
         int height = screen.getTerminalSize().getRows();
-        int width = screen.getTerminalSize().getColumns();
+        // int width = screen.getTerminalSize().getColumns();
         int line = 0;
+        int column = 0;
         for (int i = 0; i < buffer.length() && i < height - 2; i++) {
             if (buffer.charAt(i) == '\n') {
                 line++;
+                column = 0; // Reset column for new line
                 continue; // Skip newline characters
             }
-            screen.setCharacter(i, line, TextCharacter.fromCharacter(
+            screen.setCharacter(column++, line, TextCharacter.fromCharacter(
                     buffer.charAt(i), TextColor.ANSI.WHITE, TextColor.ANSI.BLACK)[0]);
         }
     }

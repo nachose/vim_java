@@ -4,12 +4,13 @@ import com.googlecode.lanterna.input.KeyType;
 import com.jiss.app.EditorMode;
 import com.jiss.app.ScreenStatus;
 import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.TerminalPosition;
 
 import java.io.IOException;
 
 public class VisualModeHandler implements KeyInputHandler {
     @Override
-    public LoopStatus handleTextInput(ScreenStatus.Position pos,
+    public LoopStatus handleTextInput(TerminalPosition pos,
                                KeyStroke key,
                                StringBuilder commandBuffer,
                                StringBuilder buffer) throws IOException {
@@ -20,13 +21,13 @@ public class VisualModeHandler implements KeyInputHandler {
         } else if (key.getKeyType() == KeyType.Character && key.getCharacter() == ':') {
             mode = EditorMode.COMMAND;
             commandBuffer.setLength(0); // Clear command buffer
-        } else if (key.getKeyType() == KeyType.Backspace && pos.cursorX() > 0) {
-            //selectionBuffer.deleteCharAt(pos.cursorX() - 1);
-            pos = new ScreenStatus.Position(pos.cursorX() - 1, pos.cursorY());
-        } else if (key.getKeyType() == KeyType.ArrowLeft && pos.cursorX() > 0) {
-            pos = new ScreenStatus.Position(pos.cursorX() - 1, pos.cursorY());
-        } else if (key.getKeyType() == KeyType.ArrowRight && pos.cursorX() < buffer.length()) {
-            pos = new ScreenStatus.Position(pos.cursorX() + 1, pos.cursorY());
+        } else if (key.getKeyType() == KeyType.Backspace && pos.getColumn() > 0) {
+            //selectionBuffer.deleteCharAt(pos.getColumn() - 1);
+            pos = new TerminalPosition(pos.getColumn() - 1, pos.getRow());
+        } else if (key.getKeyType() == KeyType.ArrowLeft && pos.getColumn() > 0) {
+            pos = new TerminalPosition(pos.getColumn() - 1, pos.getRow());
+        } else if (key.getKeyType() == KeyType.ArrowRight && pos.getColumn() < buffer.length()) {
+            pos = new TerminalPosition(pos.getColumn() + 1, pos.getRow());
         } else if (key.getKeyType() == KeyType.EOF) {
           running = false;
         }

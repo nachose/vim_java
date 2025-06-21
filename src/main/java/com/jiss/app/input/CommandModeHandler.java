@@ -1,15 +1,15 @@
 package com.jiss.app.input;
 
 import com.jiss.app.EditorMode;
-import com.jiss.app.ScreenStatus;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
+import com.googlecode.lanterna.TerminalPosition;
 
 import java.io.IOException;
 
 public class CommandModeHandler implements KeyInputHandler {
     @Override
-    public LoopStatus handleTextInput(ScreenStatus.Position pos,
+    public LoopStatus handleTextInput(TerminalPosition pos,
                                KeyStroke key,
                                StringBuilder commandBuffer,
                                StringBuilder buffer) throws IOException {
@@ -24,9 +24,9 @@ public class CommandModeHandler implements KeyInputHandler {
             // Execute command (for now, just print it)
             System.out.println("Command: " + commandBuffer.toString());
             commandBuffer.setLength(0); // Clear command buffer
-        } else if (key.getKeyType() == KeyType.Backspace && pos.cursorX() > 0) {
-            commandBuffer.deleteCharAt(pos.cursorX() - 1);
-            pos = new ScreenStatus.Position(pos.cursorX() - 1, pos.cursorY());
+        } else if (key.getKeyType() == KeyType.Backspace && pos.getColumn() > 0) {
+            commandBuffer.deleteCharAt(pos.getColumn() - 1);
+            pos = new TerminalPosition(pos.getColumn() - 1, pos.getRow());
         } else if (key.getKeyType() == KeyType.EOF) {
           running = false;
         }
