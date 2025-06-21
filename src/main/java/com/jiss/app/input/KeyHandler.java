@@ -16,7 +16,6 @@ public class KeyHandler {
         modesMap_.put(EditorMode.INSERT, new InsertModeHandler());
         modesMap_.put(EditorMode.COMMAND, new CommandModeHandler());
         modesMap_.put(EditorMode.VISUAL, new VisualModeHandler());
-        modesMap_.put(EditorMode.VISUALLINE, new VisualModeHandler());
         modesMap_.put(EditorMode.NORMAL, new NormalModeHandler());
         modesMap_.put(EditorMode.VISUALLINE, new VisualLineModeHandler());
         modesMap_.put(EditorMode.VISUALBLOCK, new VisualBlockModeHandler());
@@ -36,36 +35,6 @@ public class KeyHandler {
 
         mode_ = status.mode();
         screen = new ScreenStatus(screen.getScreen(), status.pos());
-
-        /*
-           if (key.getKeyType() == KeyType.Escape) {
-           mode_ = EditorMode.NORMAL;
-           } else if (key.getKeyType() == KeyType.Character && mode_ != EditorMode.INSERT && key.getCharacter() == 'i') {
-           mode_ = EditorMode.INSERT;
-           } else if (key.getKeyType() == KeyType.Character && mode_ != EditorMode.INSERT && key.getCharacter() == ':') {
-           mode_ = EditorMode.COMMAND;
-           commandBuffer.setLength(0); // Clear command buffer
-           } else if (key.getKeyType() == KeyType.Character && mode_ == EditorMode.COMMAND) {
-           commandBuffer.append(key.getCharacter());
-           } else if (key.getKeyType() == KeyType.Enter && mode_ == EditorMode.COMMAND) {
-        // Execute command (for now, just print it)
-        System.out.println("Command: " + commandBuffer.toString());
-        commandBuffer.setLength(0); // Clear command buffer
-        mode_ = EditorMode.NORMAL;
-        } else if (key.getKeyType() == KeyType.Backspace && screen.getCursorX() > 0) {
-        buffer.deleteCharAt(screen.getCursorX() - 1);
-        screen.setCursorX(screen.getCursorX() - 1);
-        } else if (key.getKeyType() == KeyType.Character && mode_ == EditorMode.INSERT) {
-        buffer.insert(screen.getCursorX(), key.getCharacter());
-        screen.setCursorX(screen.getCursorX() + 1);
-        } else if (key.getKeyType() == KeyType.ArrowLeft && screen.getCursorX() > 0) {
-        screen.setCursorX(screen.getCursorX() - 1);
-        } else if (key.getKeyType() == KeyType.ArrowRight && screen.getCursorX() < buffer.length()) {
-        screen.setCursorX(screen.getCursorX() + 1);
-        } else if (key.getKeyType() == KeyType.EOF) {
-        running = false;
-        }
-        */
 
         return status.running();
 

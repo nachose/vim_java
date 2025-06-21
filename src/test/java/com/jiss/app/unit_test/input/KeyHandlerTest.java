@@ -1,5 +1,3 @@
-
-// File: src/test/java/com/jiss/app/input/KeyHandlerTest.java
 package com.jiss.app.input;
 
 import com.jiss.app.EditorMode;
@@ -9,7 +7,6 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.TerminalPosition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.io.IOException;
 
@@ -34,7 +31,6 @@ class KeyHandlerTest {
         handler = mock(KeyInputHandler.class);
         keyStroke = mock(KeyStroke.class);
 
-        // Mock getScreen().readInput()
         var screen = mock(com.googlecode.lanterna.screen.Screen.class);
         when(screenStatus.getScreen()).thenReturn(screen);
         try {
@@ -43,16 +39,13 @@ class KeyHandlerTest {
             fail("IOException in mock setup");
         }
 
-        // Mock getPosition()
         var pos = mock(TerminalPosition.class);
         when(screenStatus.getPosition()).thenReturn(pos);
-
-        // Replace the handler in the static map for NORMAL mode
-        KeyHandlerTestUtils.setHandlerForMode(EditorMode.NORMAL, handler);
     }
 
     @Test
-    void testHandleTextInput_RunningTrue() throws IOException {
+    void testHandleTextInput_NormalMode_RunningTrue() throws IOException {
+        KeyHandlerTestUtils.setHandlerForMode(EditorMode.NORMAL, handler);
         LoopStatus status = new LoopStatus(true, EditorMode.NORMAL, screenStatus.getPosition());
         when(handler.handleTextInput(any(), any(), any(), any())).thenReturn(status);
 
@@ -63,13 +56,44 @@ class KeyHandlerTest {
     }
 
     @Test
-    void testHandleTextInput_RunningFalse() throws IOException {
+    void testHandleTextInput_NormalMode_RunningFalse() throws IOException {
+        KeyHandlerTestUtils.setHandlerForMode(EditorMode.NORMAL, handler);
         LoopStatus status = new LoopStatus(false, EditorMode.NORMAL, screenStatus.getPosition());
         when(handler.handleTextInput(any(), any(), any(), any())).thenReturn(status);
 
         boolean running = keyHandler.handleTextInput(screenStatus, commandBuffer, buffer);
 
         assertFalse(running);
+    }
+
+    @Test
+    void testHandleTextInput_VisualLineMode() throws IOException {
+        KeyHandlerTestUtils.setHandlerForMode(EditorMode.VISUALLINE, handler);
+        // Simulate switching to VISUALLINE mode
+        LoopStatus status = new LoopStatus(true, EditorMode.VISUALLINE, screenStatus.getPosition());
+        when(handler.handleTextInput(any(), any(), any(), any())).thenReturn(status);
+
+        // Set KeyHandler's mode_ to VISUALLINE via reflection
+        TestUtils.setMode(keyHandler, EditorMode.VISUALLINE);
+
+        boolean running = keyHandler.handleTextInput(screenStatus, commandBuffer, buffer);
+
+        assertTrue(running);
+        verify(handler).handleTextInput(any(), any(), any(), any());
+    }
+
+    @Test
+    void testHandleTextInput_VisualBlockMode() throws IOException {
+        KeyHandlerTestUtils.setHandlerForMode(EditorMode.VISUALBLOCK, handler);
+        LoopStatus status = new LoopStatus(true, EditorMode.VISUALBLOCK, screenStatus.getPosition());
+        when(handler.handleTextInput(any(), any(), any(), any())).thenReturn(status);
+
+        TestUtils.setMode(keyHandler, EditorMode.VISUALBLOCK);
+
+        boolean running = keyHandler.handleTextInput(screenStatus, commandBuffer, buffer);
+
+        assertTrue(running);
+        verify(handler).handleTextInput(any(), any(), any(), any());
     }
 }
 
@@ -83,6 +107,19 @@ class KeyHandlerTestUtils {
             java.util.Map<EditorMode, KeyInputHandler> map =
                     (java.util.Map<EditorMode, KeyInputHandler>) field.get(null);
             map.put(mode, handler);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+
+// Utility to set private mode_ field for testing
+class TestUtils {
+    static void setMode(KeyHandler keyHandler, EditorMode mode) {
+        try {
+            var field = KeyHandler.class.getDeclaredField("mode_");
+            field.setAccessible(true);
+            field.set(keyHandler, mode);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
