@@ -34,7 +34,7 @@ public class KeyHandler {
         LoopStatus status = handler.handleTextInput(screen.getPosition(), key, commandBuffer, buffer);
 
         mode_ = status.mode();
-        screen = new ScreenStatus(screen.getScreen(), status.pos());
+        screen.setPosition(status.pos());
 
         return status.running();
 

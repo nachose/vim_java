@@ -24,9 +24,9 @@ public class VimJava {
             ScreenStatus screenStatus = new ScreenStatus(screen);
             boolean running = true;
             StringBuilder buffer = new StringBuilder();
-            TerminalPosition pos =
-                    new TerminalPosition(screenStatus.getPosition().getColumn(),
-                                         screenStatus.getPosition().getRow());
+//            TerminalPosition pos =
+//                    new TerminalPosition(screenStatus.getPosition().getColumn(),
+//                                         screenStatus.getPosition().getRow());
             StringBuilder commandBuffer = new StringBuilder();
 
             while (running) {
@@ -38,7 +38,7 @@ public class VimJava {
 
                 drawCommandLine(screen, commandBuffer);
 
-                updateCursorPosition(pos, screenStatus, screen);
+                drawCursor(screenStatus, screen);
 
                 refreshScreen(screen);
 
@@ -48,10 +48,8 @@ public class VimJava {
         }
     }
 
-    private static void updateCursorPosition(TerminalPosition pos, ScreenStatus screenStatus, Screen screen) {
-        pos.withRow(screenStatus.getPosition().getColumn())
-           .withColumn(screenStatus.getPosition().getRow());
-        screen.setCursorPosition(pos);
+    private static void drawCursor(ScreenStatus screenStatus, Screen screen) {
+        screen.setCursorPosition(screenStatus.getPosition());
     }
 
     private static void clearScreen(Screen screen) throws IOException {
@@ -59,7 +57,7 @@ public class VimJava {
     }
 
     private static void refreshScreen(Screen screen) throws IOException {
-        screen.refresh();
+        screen.refresh(Screen.RefreshType.AUTOMATIC);
     }
 
     private static boolean handleTextInput(ScreenStatus screen,
@@ -94,7 +92,7 @@ public class VimJava {
         }
     }
 
-    private static void drawBuffer(Screen screen, StringBuilder buffer) {
+    private static void drawBuffer(Screen screen, StringBuilder buffer) throws InterruptedException {
         // Draw buffer (avoid last two lines)
         int height = screen.getTerminalSize().getRows();
         // int width = screen.getTerminalSize().getColumns();
@@ -103,11 +101,29 @@ public class VimJava {
         for (int i = 0; i < buffer.length() && i < height - 2; i++) {
             if (buffer.charAt(i) == '\n') {
                 line++;
+                //drawDebugginErrorMessage(screen, "New line detected at index: " + i);
                 column = 0; // Reset column for new line
                 continue; // Skip newline characters
             }
             screen.setCharacter(column++, line, TextCharacter.fromCharacter(
                     buffer.charAt(i), TextColor.ANSI.WHITE, TextColor.ANSI.BLACK)[0]);
+        }
+    }
+
+    private static void drawDebuggingErrorMessage(Screen screen, String message) throws InterruptedException {
+        drawMessage(screen, message);
+        Thread.sleep(3000);
+        drawMessage(screen, "");
+    }
+
+    // Draws a message in the command line region (bottom line)
+    private static void drawMessage(Screen screen, String message) {
+        int height = screen.getTerminalSize().getRows();
+        int width = screen.getTerminalSize().getColumns();
+        for (int col = 0; col < width; col++) {
+            char ch = col < message.length() ? message.charAt(col) : ' ';
+            screen.setCharacter(col, height - 1, TextCharacter.fromCharacter(
+                    ch, TextColor.ANSI.WHITE, TextColor.ANSI.RED)[0]);
         }
     }
 }

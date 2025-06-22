@@ -6,9 +6,7 @@ import com.googlecode.lanterna.TerminalPosition;
 
 public class ScreenStatus {
 
-    // public record Position(int cursorX, int cursorY) {};
-    // private Position pos_;
-    private final TerminalPosition pos_;
+    private TerminalPosition pos_;
     private final Screen screen_;
 
     public ScreenStatus (Screen screen) {
@@ -24,9 +22,9 @@ public class ScreenStatus {
         return pos_;
     }
 
-    // public void setPosition(Position pos) {
-    //     pos_ = pos;
-    // }
+    public void setPosition(TerminalPosition pos) {
+         pos_ = pos;
+    }
 
 
     public Screen getScreen() {
