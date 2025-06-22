@@ -36,8 +36,8 @@ public class NormalModeHandler implements KeyInputHandler {
         if ((key.isCtrlDown() && (key.getCharacter() == 'v' || key.getCharacter() == 'q'))) {
             mode = EditorMode.VISUALBLOCK;
         } else if (key.getKeyType() == KeyType.EOF) {
-            running = false;
+            mode = EditorMode.STOPPED;
         }
-        return new LoopStatus(running, mode, pos);
+        return new LoopStatus( mode, pos);
     }
 }

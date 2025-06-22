@@ -26,7 +26,6 @@ class InsertModeHandlerTest {
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
         assertEquals(EditorMode.NORMAL, status.mode());
-        assertTrue(status.running());
         assertEquals(pos, status.pos());
     }
 
@@ -42,7 +41,6 @@ class InsertModeHandlerTest {
 
         assertEquals("ac", buffer.toString());
         assertEquals(EditorMode.INSERT, status.mode());
-        assertTrue(status.running());
         assertEquals(new TerminalPosition(1, 0), status.pos());
     }
 
@@ -58,7 +56,6 @@ class InsertModeHandlerTest {
 
         assertEquals("abc", buffer.toString());
         assertEquals(EditorMode.INSERT, status.mode());
-        assertTrue(status.running());
         assertEquals(pos, status.pos());
     }
 
@@ -75,7 +72,6 @@ class InsertModeHandlerTest {
 
         assertEquals("axb", buffer.toString());
         assertEquals(EditorMode.INSERT, status.mode());
-        assertTrue(status.running());
         assertEquals(new TerminalPosition(2, 0), status.pos());
     }
 
@@ -91,7 +87,6 @@ class InsertModeHandlerTest {
 
         assertEquals(new TerminalPosition(1, 0), status.pos());
         assertEquals(EditorMode.INSERT, status.mode());
-        assertTrue(status.running());
     }
 
     @Test
@@ -106,7 +101,6 @@ class InsertModeHandlerTest {
 
         assertEquals(pos, status.pos());
         assertEquals(EditorMode.INSERT, status.mode());
-        assertTrue(status.running());
     }
 
     @Test
@@ -121,7 +115,6 @@ class InsertModeHandlerTest {
 
         assertEquals(new TerminalPosition(2, 0), status.pos());
         assertEquals(EditorMode.INSERT, status.mode());
-        assertTrue(status.running());
     }
 
     @Test
@@ -136,7 +129,6 @@ class InsertModeHandlerTest {
 
         assertEquals(pos, status.pos());
         assertEquals(EditorMode.INSERT, status.mode());
-        assertTrue(status.running());
     }
 
     @Test
@@ -153,7 +145,6 @@ class InsertModeHandlerTest {
         assertEquals("ab\nc", buffer.toString());
         assertEquals(new TerminalPosition(0, 2), status.pos());
         assertEquals(EditorMode.INSERT, status.mode());
-        assertTrue(status.running());
     }
 
     @Test
@@ -166,8 +157,7 @@ class InsertModeHandlerTest {
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
-        assertFalse(status.running());
-        assertEquals(EditorMode.INSERT, status.mode());
+        assertEquals(EditorMode.STOPPED, status.mode());
         assertEquals(pos, status.pos());
     }
 
@@ -188,6 +178,5 @@ class InsertModeHandlerTest {
         // Cursor should move to start of next line
         assertEquals(new TerminalPosition(0, 1), status.pos());
         assertEquals(EditorMode.INSERT, status.mode());
-        assertTrue(status.running());
     }
 }

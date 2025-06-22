@@ -25,6 +25,8 @@ public class KeyHandler {
         mode_ = EditorMode.NORMAL;
     }
 
+    //TODO: Here, return a WindowContext, instead of a boolean.
+    //Build a WindowContext everytime if needed.
     public boolean handleTextInput(ScreenStatus screen, StringBuilder commandBuffer, StringBuilder buffer) throws IOException {
         boolean running = true;
         KeyStroke key = screen.getScreen().readInput();
@@ -36,7 +38,7 @@ public class KeyHandler {
         mode_ = status.mode();
         screen.setPosition(status.pos());
 
-        return status.running();
+        return mode_ != EditorMode.STOPPED;
 
     }
 }

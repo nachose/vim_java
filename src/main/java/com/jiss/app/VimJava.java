@@ -8,6 +8,10 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TextCharacter;
 import java.io.IOException;
+import java.util.ArrayList;
+import com.jiss.app.display.ScreenRegion;
+
+import com.jiss.app.display.ScreenRegionFactory;
 import com.jiss.app.input.KeyHandler;
 
 
@@ -15,6 +19,7 @@ import com.jiss.app.input.KeyHandler;
 public class VimJava {
 
     static private KeyHandler handler_ = new KeyHandler();
+    static private ArrayList<ScreenRegion> regions = ScreenRegionFactory.getRegions();
 
 
     public static void main(String[] args) throws Exception {
@@ -81,6 +86,7 @@ public class VimJava {
     }
 
     private static void drawStatusLine(Screen screen) {
+
         // Draw status line
         int height = screen.getTerminalSize().getRows();
         int width = screen.getTerminalSize().getColumns();

@@ -46,7 +46,7 @@ class KeyHandlerTest {
     @Test
     void testHandleTextInput_NormalMode_RunningTrue() throws IOException {
         KeyHandlerTestUtils.setHandlerForMode(EditorMode.NORMAL, handler);
-        LoopStatus status = new LoopStatus(true, EditorMode.NORMAL, screenStatus.getPosition());
+        LoopStatus status = new LoopStatus( EditorMode.NORMAL, screenStatus.getPosition());
         when(handler.handleTextInput(any(), any(), any(), any())).thenReturn(status);
 
         boolean running = keyHandler.handleTextInput(screenStatus, commandBuffer, buffer);
@@ -58,7 +58,7 @@ class KeyHandlerTest {
     @Test
     void testHandleTextInput_NormalMode_RunningFalse() throws IOException {
         KeyHandlerTestUtils.setHandlerForMode(EditorMode.NORMAL, handler);
-        LoopStatus status = new LoopStatus(false, EditorMode.NORMAL, screenStatus.getPosition());
+        LoopStatus status = new LoopStatus( EditorMode.STOPPED, screenStatus.getPosition());
         when(handler.handleTextInput(any(), any(), any(), any())).thenReturn(status);
 
         boolean running = keyHandler.handleTextInput(screenStatus, commandBuffer, buffer);
@@ -70,7 +70,7 @@ class KeyHandlerTest {
     void testHandleTextInput_VisualLineMode() throws IOException {
         KeyHandlerTestUtils.setHandlerForMode(EditorMode.VISUALLINE, handler);
         // Simulate switching to VISUALLINE mode
-        LoopStatus status = new LoopStatus(true, EditorMode.VISUALLINE, screenStatus.getPosition());
+        LoopStatus status = new LoopStatus( EditorMode.VISUALLINE, screenStatus.getPosition());
         when(handler.handleTextInput(any(), any(), any(), any())).thenReturn(status);
 
         // Set KeyHandler's mode_ to VISUALLINE via reflection
@@ -85,7 +85,7 @@ class KeyHandlerTest {
     @Test
     void testHandleTextInput_VisualBlockMode() throws IOException {
         KeyHandlerTestUtils.setHandlerForMode(EditorMode.VISUALBLOCK, handler);
-        LoopStatus status = new LoopStatus(true, EditorMode.VISUALBLOCK, screenStatus.getPosition());
+        LoopStatus status = new LoopStatus( EditorMode.VISUALBLOCK, screenStatus.getPosition());
         when(handler.handleTextInput(any(), any(), any(), any())).thenReturn(status);
 
         TestUtils.setMode(keyHandler, EditorMode.VISUALBLOCK);

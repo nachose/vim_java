@@ -5,4 +5,4 @@ import com.jiss.app.ScreenStatus;
 import com.googlecode.lanterna.TerminalPosition;
 
 // In file: src/main/java/com/jiss/app/LoopStatus.java
-public record LoopStatus(boolean running, EditorMode mode, TerminalPosition pos) {}
+public record LoopStatus( EditorMode mode, TerminalPosition pos) {}

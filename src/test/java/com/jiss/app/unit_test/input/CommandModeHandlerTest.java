@@ -26,7 +26,6 @@ class CommandModeHandlerTest {
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
         assertEquals(EditorMode.NORMAL, status.mode());
-        assertTrue(status.running());
         assertEquals(pos, status.pos());
     }
 
@@ -43,7 +42,6 @@ class CommandModeHandlerTest {
 
         assertEquals("ax", commandBuffer.toString());
         assertEquals(EditorMode.COMMAND, status.mode());
-        assertTrue(status.running());
         assertEquals(pos, status.pos());
     }
 
@@ -59,7 +57,6 @@ class CommandModeHandlerTest {
 
         assertEquals("", commandBuffer.toString());
         assertEquals(EditorMode.COMMAND, status.mode());
-        assertTrue(status.running());
         assertEquals(pos, status.pos());
     }
 
@@ -75,7 +72,6 @@ class CommandModeHandlerTest {
 
         assertEquals("ac", commandBuffer.toString());
         assertEquals(EditorMode.COMMAND, status.mode());
-        assertTrue(status.running());
         assertEquals(new TerminalPosition(1, 0), status.pos());
     }
 
@@ -91,7 +87,6 @@ class CommandModeHandlerTest {
 
         assertEquals("abc", commandBuffer.toString());
         assertEquals(EditorMode.COMMAND, status.mode());
-        assertTrue(status.running());
         assertEquals(pos, status.pos());
     }
 
@@ -105,8 +100,7 @@ class CommandModeHandlerTest {
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
-        assertFalse(status.running());
-        assertEquals(EditorMode.COMMAND, status.mode());
+        assertEquals(EditorMode.STOPPED, status.mode());
         assertEquals(pos, status.pos());
     }
 }

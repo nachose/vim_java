@@ -34,8 +34,8 @@ public class InsertModeHandler implements KeyInputHandler {
         } else if (key.getKeyType() == KeyType.ArrowRight && pos.getColumn() < buffer.length()) {
             pos = new TerminalPosition(pos.getColumn() + 1, pos.getRow());
         } else if (key.getKeyType() == KeyType.EOF) {
-            running = false;
+            mode = EditorMode.STOPPED;
         }
-        return new LoopStatus(running, mode , pos);
+        return new LoopStatus( mode , pos);
     }
 }

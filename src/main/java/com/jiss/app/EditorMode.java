@@ -37,6 +37,10 @@ public enum EditorMode {
         public String getModeStr() {
             return "COMMAND";
         }
+    },
+    STOPPED {
+        @Override
+        public String getModeStr() { return "STOPPED";}
     };
 
     public abstract String getModeStr();
