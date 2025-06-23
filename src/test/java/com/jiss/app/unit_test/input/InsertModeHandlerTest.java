@@ -1,10 +1,12 @@
-package com.jiss.app.input;
+package com.jiss.app.unit_test.input;
 
 import com.jiss.app.EditorMode;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.TerminalPosition;
 import org.junit.jupiter.api.Test;
+import com.jiss.app.input.InsertModeHandler;
+import com.jiss.app.input.LoopStatus;
 
 import java.io.IOException;
 import java.util.ArrayList;
