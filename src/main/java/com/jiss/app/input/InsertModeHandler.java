@@ -17,6 +17,9 @@ public class InsertModeHandler implements KeyInputHandler {
                                StringBuilder commandBuffer,
                                ArrayList<String> buffer) throws IOException {
         EditorMode mode = EditorMode.INSERT;
+        if(buffer.isEmpty()) {
+            buffer.add("");
+        }
         StringBuilder currentLine = new StringBuilder(buffer.get(pos.getRow()));
         if (key.getKeyType() == KeyType.Escape) {
             mode = EditorMode.NORMAL;

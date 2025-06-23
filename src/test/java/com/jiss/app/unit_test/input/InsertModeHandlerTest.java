@@ -30,6 +30,22 @@ class InsertModeHandlerTest {
         assertEquals(EditorMode.NORMAL, status.mode());
         assertEquals(pos, status.pos());
     }
+    @Test
+    void testFirstCharacter() throws IOException {
+        KeyStroke key = mock(KeyStroke.class);
+        when(key.getKeyType()).thenReturn(KeyType.Character);
+        when(key.getCharacter()).thenReturn('x');
+        TerminalPosition pos = new TerminalPosition(0, 0);
+        StringBuilder commandBuffer = new StringBuilder();
+        ArrayList<String> buffer = new ArrayList();
+
+        LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
+
+        assertEquals(EditorMode.INSERT, status.mode());
+        assertEquals("[x]", buffer.toString());
+        TerminalPosition expectedPos = new TerminalPosition(1, 0);
+        assertEquals(expectedPos, status.pos());
+    }
 
     @Test
     void testBackspaceDeletesCharacter() throws IOException {
