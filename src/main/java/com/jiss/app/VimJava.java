@@ -12,6 +12,7 @@ import com.jiss.app.display.ScreenRegion;
 
 import com.jiss.app.display.ScreenRegionFactory;
 import com.jiss.app.input.KeyHandler;
+import com.jiss.app.input.LoopStatus;
 
 
 
@@ -39,18 +40,19 @@ public class VimJava {
 
                 drawCommandLine(screen, commandBuffer);
 
-                drawCursor(screenStatus, screen);
+                drawCursor(screenStatus);
 
                 refreshScreen(screen);
 
-                running = handleTextInput(screenStatus, commandBuffer, buffer);
+                LoopStatus status = handleTextInput(screenStatus, commandBuffer, buffer);
+                running = status.mode() != EditorMode.STOPPED;
             }
             screen.stopScreen();
         }
     }
 
-    private static void drawCursor(ScreenStatus screenStatus, Screen screen) {
-        screen.setCursorPosition(screenStatus.getPosition());
+    private static void drawCursor(ScreenStatus screenStatus) {
+        screenStatus.updatePostion();
     }
 
     private static void clearScreen(Screen screen) throws IOException {
@@ -61,7 +63,7 @@ public class VimJava {
         screen.refresh(Screen.RefreshType.AUTOMATIC);
     }
 
-    private static boolean handleTextInput(ScreenStatus screen,
+    private static LoopStatus handleTextInput(ScreenStatus screen,
                                            StringBuilder commandBuffer,
                                            ArrayList<String> buffer) throws IOException {
 

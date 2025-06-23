@@ -50,9 +50,9 @@ class KeyHandlerTest {
         LoopStatus status = new LoopStatus( EditorMode.NORMAL, screenStatus.getPosition());
         when(handler.handleTextInput(any())).thenReturn(status);
 
-        boolean running = keyHandler.handleTextInput(screenStatus, commandBuffer, buffer);
+        status = keyHandler.handleTextInput(screenStatus, commandBuffer, buffer);
 
-        assertTrue(running);
+        assertTrue(status.mode() != EditorMode.STOPPED);
         verify(handler).handleTextInput(any());
     }
 
@@ -62,9 +62,9 @@ class KeyHandlerTest {
         LoopStatus status = new LoopStatus( EditorMode.STOPPED, screenStatus.getPosition());
         when(handler.handleTextInput(any())).thenReturn(status);
 
-        boolean running = keyHandler.handleTextInput(screenStatus, commandBuffer, buffer);
+        status = keyHandler.handleTextInput(screenStatus, commandBuffer, buffer);
 
-        assertFalse(running);
+        assertTrue(status.mode() == EditorMode.STOPPED);
     }
 
     @Test
@@ -77,9 +77,9 @@ class KeyHandlerTest {
         // Set KeyHandler's mode_ to VISUALLINE via reflection
         TestUtils.setMode(keyHandler, EditorMode.VISUALLINE);
 
-        boolean running = keyHandler.handleTextInput(screenStatus, commandBuffer, buffer);
+        status = keyHandler.handleTextInput(screenStatus, commandBuffer, buffer);
 
-        assertTrue(running);
+        assertTrue(status.mode() != EditorMode.STOPPED);
         verify(handler).handleTextInput(any());
     }
 
@@ -91,9 +91,9 @@ class KeyHandlerTest {
 
         TestUtils.setMode(keyHandler, EditorMode.VISUALBLOCK);
 
-        boolean running = keyHandler.handleTextInput(screenStatus, commandBuffer, buffer);
+        status = keyHandler.handleTextInput(screenStatus, commandBuffer, buffer);
 
-        assertTrue(running);
+        assertTrue(status.mode() != EditorMode.STOPPED);
         verify(handler).handleTextInput(any());
     }
 }

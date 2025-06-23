@@ -29,7 +29,7 @@ public class KeyHandler {
 
     //TODO: Here, return a WindowContext, instead of a boolean.
     //Build a WindowContext everytime if needed.
-    public boolean handleTextInput(ScreenStatus screen, StringBuilder commandBuffer, ArrayList<String> buffer) throws IOException {
+    public LoopStatus handleTextInput(ScreenStatus screen, StringBuilder commandBuffer, ArrayList<String> buffer) throws IOException {
         KeyStroke key = screen.getScreen().readInput();
         KeyInputHandler handler = modesMap_.get(mode_);
 
@@ -43,7 +43,7 @@ public class KeyHandler {
         mode_ = status.mode();
         screen.setPosition(status.pos());
 
-        return mode_ != EditorMode.STOPPED;
+        return status;
 
     }
 }

@@ -31,4 +31,8 @@ public class ScreenStatus {
         return screen_;
     }
 
+    public void updatePostion() {
+        screen_.setCursorPosition(pos_);
+    }
+
 }
