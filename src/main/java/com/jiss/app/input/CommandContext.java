@@ -8,5 +8,4 @@ public interface CommandContext {
     TerminalPosition getTerminalPosition();
     KeyStroke getKeyStroke();
     StringBuilder getCommandBuffer();
-    ArrayList<String> getBuffer();
 }

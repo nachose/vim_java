@@ -9,6 +9,7 @@ for each paragraph, or maybe use a flyweight pattern.
  (file I/O, more commands, multi-line support, etc.)
 - [X] Get rid of LoopStatus, and comeback to returning just a boolean. It is not needed, we will keep track
 of the state (mode) in KeyHandler.
+- [ ] Now the regions in display package should implement Region, not ScreenRegion
 
 ARCHIVED
 - Change from vim keybindings to helix keybindings. --> Won't do.

@@ -7,6 +7,5 @@ import java.util.ArrayList;
 public interface InsertContext {
     TerminalPosition getTerminalPosition();
     KeyStroke getKeyStroke();
-    StringBuilder getCommandBuffer();
     ArrayList<String> getBuffer();
 }

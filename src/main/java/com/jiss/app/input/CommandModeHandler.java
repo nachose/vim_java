@@ -15,7 +15,6 @@ public class CommandModeHandler implements KeyInputHandler<CommandContext> {
         EditorMode mode = EditorMode.COMMAND;
         KeyStroke key = context.getKeyStroke();
         TerminalPosition pos = context.getTerminalPosition();
-        ArrayList<String> buffer = context.getBuffer();
         StringBuilder commandBuffer = context.getCommandBuffer();
         if (key.getKeyType() == KeyType.Escape) {
             mode = EditorMode.NORMAL;
