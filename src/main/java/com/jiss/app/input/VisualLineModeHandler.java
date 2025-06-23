@@ -9,14 +9,14 @@ import com.googlecode.lanterna.TerminalPosition;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class VisualLineModeHandler implements KeyInputHandler {
+public class VisualLineModeHandler implements KeyInputHandler<VisualContext> {
     @Override
-    public LoopStatus handleTextInput(TerminalPosition pos,
-                               KeyStroke key,
-                               StringBuilder commandBuffer,
-                               ArrayList<String> buffer) throws IOException {
+    public LoopStatus handleTextInput(VisualContext context) throws IOException {
         EditorMode mode = EditorMode.VISUAL;
-        boolean running = true;
+        KeyStroke key = context.getKeyStroke();
+        TerminalPosition pos = context.getTerminalPosition();
+        ArrayList<String> buffer = context.getBuffer();
+        StringBuilder commandBuffer = context.getCommandBuffer();
         if (key.getKeyType() == KeyType.Escape) {
             mode = EditorMode.NORMAL;
         } else if (key.getKeyType() == KeyType.Character && key.getCharacter() == ':') {

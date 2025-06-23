@@ -6,10 +6,7 @@ import java.util.ArrayList;
 
 import java.io.IOException;
 
-public interface KeyInputHandler {
+public interface KeyInputHandler<C> {
 
-    LoopStatus handleTextInput(TerminalPosition pos,
-                            KeyStroke key,
-                            StringBuilder commandBuffer,
-                            ArrayList<String> buffer) throws IOException;
+    LoopStatus handleTextInput(C Context) throws IOException;
 }

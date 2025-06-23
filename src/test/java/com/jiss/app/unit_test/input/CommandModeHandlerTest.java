@@ -5,6 +5,7 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.TerminalPosition;
 import org.junit.jupiter.api.Test;
+import com.jiss.app.input.InputContext;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,8 +24,9 @@ class CommandModeHandlerTest {
         TerminalPosition pos = new TerminalPosition(2, 0);
         StringBuilder commandBuffer = new StringBuilder();
         ArrayList<String> buffer = new ArrayList();
+        InputContext context = new InputContext(pos, key, commandBuffer, buffer);
 
-        LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
+        LoopStatus status = handler.handleTextInput(context);
 
         assertEquals(EditorMode.NORMAL, status.mode());
         assertEquals(pos, status.pos());
@@ -39,7 +41,9 @@ class CommandModeHandlerTest {
         StringBuilder commandBuffer = new StringBuilder("a");
         ArrayList<String> buffer = new ArrayList();
 
-        LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
+        InputContext context = new InputContext(pos, key, commandBuffer, buffer);
+
+        LoopStatus status = handler.handleTextInput(context);
 
         assertEquals("ax", commandBuffer.toString());
         assertEquals(EditorMode.COMMAND, status.mode());
@@ -54,7 +58,9 @@ class CommandModeHandlerTest {
         StringBuilder commandBuffer = new StringBuilder("cmd");
         ArrayList<String> buffer = new ArrayList();
 
-        LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
+        InputContext context = new InputContext(pos, key, commandBuffer, buffer);
+
+        LoopStatus status = handler.handleTextInput(context);
 
         assertEquals("", commandBuffer.toString());
         assertEquals(EditorMode.COMMAND, status.mode());
@@ -69,7 +75,9 @@ class CommandModeHandlerTest {
         StringBuilder commandBuffer = new StringBuilder("abc");
         ArrayList<String> buffer = new ArrayList();
 
-        LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
+        InputContext context = new InputContext(pos, key, commandBuffer, buffer);
+
+        LoopStatus status = handler.handleTextInput(context);
 
         assertEquals("ac", commandBuffer.toString());
         assertEquals(EditorMode.COMMAND, status.mode());
@@ -84,7 +92,9 @@ class CommandModeHandlerTest {
         StringBuilder commandBuffer = new StringBuilder("abc");
         ArrayList<String> buffer = new ArrayList();
 
-        LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
+        InputContext context = new InputContext(pos, key, commandBuffer, buffer);
+
+        LoopStatus status = handler.handleTextInput(context);
 
         assertEquals("abc", commandBuffer.toString());
         assertEquals(EditorMode.COMMAND, status.mode());
@@ -99,7 +109,9 @@ class CommandModeHandlerTest {
         StringBuilder commandBuffer = new StringBuilder();
         ArrayList<String> buffer = new ArrayList();
 
-        LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
+        InputContext context = new InputContext(pos, key, commandBuffer, buffer);
+
+        LoopStatus status = handler.handleTextInput(context);
 
         assertEquals(EditorMode.STOPPED, status.mode());
         assertEquals(pos, status.pos());

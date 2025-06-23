@@ -8,17 +8,15 @@ import java.util.ArrayList;
 
 import java.io.IOException;
 
-public class NormalModeHandler implements KeyInputHandler {
+public class NormalModeHandler implements KeyInputHandler<NormalContext> {
     @Override
-    public LoopStatus handleTextInput(TerminalPosition pos,
-                               KeyStroke key,
-                               StringBuilder commandBuffer,
-                               ArrayList<String> buffer) throws IOException {
+    public LoopStatus handleTextInput(NormalContext context) throws IOException {
         EditorMode mode = EditorMode.NORMAL;
-        boolean running = true;
-        if (key.getKeyType() == KeyType.Escape) {
-            mode = EditorMode.NORMAL;
-        } else if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'i') {
+        KeyStroke key = context.getKeyStroke();
+        TerminalPosition pos = context.getTerminalPosition();
+        ArrayList<String> buffer = context.getBuffer();
+        StringBuilder commandBuffer = context.getCommandBuffer();
+        if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'i') {
             mode = EditorMode.INSERT;
         } else if (key.getKeyType() == KeyType.Character && key.getCharacter() == ':') {
             mode = EditorMode.COMMAND;

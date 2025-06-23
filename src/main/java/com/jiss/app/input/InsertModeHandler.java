@@ -10,13 +10,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class InsertModeHandler implements KeyInputHandler {
+public class InsertModeHandler implements KeyInputHandler<InsertContext> {
     @Override
-    public LoopStatus handleTextInput(TerminalPosition pos,
-                               KeyStroke key,
-                               StringBuilder commandBuffer,
-                               ArrayList<String> buffer) throws IOException {
+    public LoopStatus handleTextInput(InsertContext context) throws IOException {
         EditorMode mode = EditorMode.INSERT;
+        KeyStroke key = context.getKeyStroke();
+        TerminalPosition pos = context.getTerminalPosition();
+        ArrayList<String> buffer = context.getBuffer();
         if(buffer.isEmpty()) {
             buffer.add("");
         }

@@ -7,6 +7,7 @@ import com.googlecode.lanterna.TerminalPosition;
 import com.jiss.app.EditorMode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import com.jiss.app.input.InputContext;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,7 +32,8 @@ class NormalModeHandlerTest {
     void testEscapeSwitchesToNormal() throws IOException {
         KeyStroke key = new KeyStroke(KeyType.Escape);
         TerminalPosition pos = new TerminalPosition(0, 0);
-        LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
+        InputContext context = new InputContext(pos, key, commandBuffer, buffer);
+        LoopStatus status = handler.handleTextInput(context);
         assertEquals(EditorMode.NORMAL, status.mode());
     }
 
@@ -39,7 +41,8 @@ class NormalModeHandlerTest {
     void testColonSwitchesToCommand() throws IOException {
         KeyStroke key = new KeyStroke(':', false, false);
         TerminalPosition pos = new TerminalPosition(0, 0);
-        LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
+        InputContext context = new InputContext(pos, key, commandBuffer, buffer);
+        LoopStatus status = handler.handleTextInput(context);
         assertEquals(EditorMode.COMMAND, status.mode());
     }
 
@@ -47,7 +50,8 @@ class NormalModeHandlerTest {
     void testArrowLeftMovesCursorLeft() throws IOException {
         KeyStroke key = new KeyStroke(KeyType.ArrowLeft);
         TerminalPosition pos = new TerminalPosition(5, 0);
-        LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
+        InputContext context = new InputContext(pos, key, commandBuffer, buffer);
+        LoopStatus status = handler.handleTextInput(context);
         assertEquals(4, status.pos().getColumn());
         assertEquals(0, status.pos().getRow());
     }
@@ -56,7 +60,8 @@ class NormalModeHandlerTest {
     void testArrowRightMovesCursorRight() throws IOException {
         KeyStroke key = new KeyStroke(KeyType.ArrowRight);
         TerminalPosition pos = new TerminalPosition(0, 0);
-        LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
+        InputContext context = new InputContext(pos, key, commandBuffer, buffer);
+        LoopStatus status = handler.handleTextInput(context);
         assertEquals(1, status.pos().getColumn());
         assertEquals(0, status.pos().getRow());
     }
@@ -65,7 +70,8 @@ class NormalModeHandlerTest {
     void testEOFStopsEditor() throws IOException {
         KeyStroke key = new KeyStroke(KeyType.EOF);
         TerminalPosition pos = new TerminalPosition(0, 0);
-        LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
+        InputContext context = new InputContext(pos, key, commandBuffer, buffer);
+        LoopStatus status = handler.handleTextInput(context);
         assertEquals(EditorMode.STOPPED, status.mode());
     }
 }

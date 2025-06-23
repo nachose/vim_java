@@ -8,14 +8,15 @@ import com.googlecode.lanterna.TerminalPosition;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CommandModeHandler implements KeyInputHandler {
+public class CommandModeHandler implements KeyInputHandler<CommandContext> {
     @Override
-    public LoopStatus handleTextInput(TerminalPosition pos,
-                               KeyStroke key,
-                               StringBuilder commandBuffer,
-                               ArrayList<String> buffer) throws IOException {
+    public LoopStatus handleTextInput(CommandContext context) throws IOException {
 
         EditorMode mode = EditorMode.COMMAND;
+        KeyStroke key = context.getKeyStroke();
+        TerminalPosition pos = context.getTerminalPosition();
+        ArrayList<String> buffer = context.getBuffer();
+        StringBuilder commandBuffer = context.getCommandBuffer();
         if (key.getKeyType() == KeyType.Escape) {
             mode = EditorMode.NORMAL;
         } else if (key.getKeyType() == KeyType.Character ) {

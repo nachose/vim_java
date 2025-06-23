@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class KeyHandler {
 
     private EditorMode mode_;
+    private InputContext context_;
     private static TreeMap<EditorMode, KeyInputHandler> modesMap_ = new TreeMap<>();
     static
     {
@@ -32,8 +33,12 @@ public class KeyHandler {
         KeyStroke key = screen.getScreen().readInput();
         KeyInputHandler handler = modesMap_.get(mode_);
 
+        context_ = new InputContext(screen.getPosition(),
+                                    key,
+                                    commandBuffer,
+                                    buffer);
 
-        LoopStatus status = handler.handleTextInput(screen.getPosition(), key, commandBuffer, buffer);
+        LoopStatus status = handler.handleTextInput(context_);
 
         mode_ = status.mode();
         screen.setPosition(status.pos());
