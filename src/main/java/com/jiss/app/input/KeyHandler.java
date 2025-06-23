@@ -29,7 +29,6 @@ public class KeyHandler {
     //TODO: Here, return a WindowContext, instead of a boolean.
     //Build a WindowContext everytime if needed.
     public boolean handleTextInput(ScreenStatus screen, StringBuilder commandBuffer, ArrayList<String> buffer) throws IOException {
-        boolean running = true;
         KeyStroke key = screen.getScreen().readInput();
         KeyInputHandler handler = modesMap_.get(mode_);
 

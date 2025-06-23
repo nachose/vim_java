@@ -16,7 +16,6 @@ public class CommandModeHandler implements KeyInputHandler {
                                ArrayList<String> buffer) throws IOException {
 
         EditorMode mode = EditorMode.COMMAND;
-        boolean running = true;
         if (key.getKeyType() == KeyType.Escape) {
             mode = EditorMode.NORMAL;
         } else if (key.getKeyType() == KeyType.Character ) {

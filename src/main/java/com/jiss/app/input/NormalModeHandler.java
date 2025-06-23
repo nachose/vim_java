@@ -1,7 +1,6 @@
 package com.jiss.app.input;
 
 import com.jiss.app.EditorMode;
-import com.jiss.app.ScreenStatus;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.TerminalPosition;

@@ -5,7 +5,6 @@ package com.jiss.app;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
-import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TextCharacter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,9 +28,6 @@ public class VimJava {
             ScreenStatus screenStatus = new ScreenStatus(screen);
             boolean running = true;
             ArrayList<String> buffer = new ArrayList<>();
-//            TerminalPosition pos =
-//                    new TerminalPosition(screenStatus.getPosition().getColumn(),
-//                                         screenStatus.getPosition().getRow());
             StringBuilder commandBuffer = new StringBuilder();
 
             while (running) {

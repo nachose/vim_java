@@ -1,6 +1,5 @@
 package com.jiss.app.input;
 
-import com.jiss.app.ScreenStatus;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.TerminalPosition;
 import java.util.ArrayList;
