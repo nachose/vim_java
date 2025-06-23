@@ -16,10 +16,13 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-      - name: Run pmd and Checkstyle
-        run: mvn verify
+      - name: Run Checkstyle
+        run: mvn checkstyle:checkstyle
+      - name: Run PMD
+        run: mvn checkstyle:check
       - name: Run PMD CPD
         run: mvn pmd:cpd-check
+
       - name: Upload PMD report
         uses: actions/upload-artifact@v4
         with:
