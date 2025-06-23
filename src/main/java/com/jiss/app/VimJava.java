@@ -13,7 +13,7 @@ import com.jiss.app.display.ScreenRegion;
 import com.jiss.app.display.ScreenRegionFactory;
 import com.jiss.app.input.KeyHandler;
 import com.jiss.app.input.LoopStatus;
-
+import com.jiss.app.util.FpsCounter;
 
 
 public class VimJava {
@@ -30,13 +30,17 @@ public class VimJava {
             boolean running = true;
             ArrayList<String> buffer = new ArrayList<>();
             StringBuilder commandBuffer = new StringBuilder();
+            FpsCounter counter = new FpsCounter();
+            EditorMode mode = EditorMode.NORMAL;
 
             while (running) {
                 clearScreen(screen);
 
                 drawBuffer(screen, buffer);
 
-                drawStatusLine(screen);
+                // Example usage in main loop
+                counter.increment();
+                drawStatusLine(screen, mode.getModeStr(), counter.getFps());
 
                 drawCommandLine(screen, commandBuffer);
 
@@ -46,6 +50,7 @@ public class VimJava {
 
                 LoopStatus status = handleTextInput(screenStatus, commandBuffer, buffer);
                 running = status.mode() != EditorMode.STOPPED;
+                mode = status.mode();
             }
             screen.stopScreen();
         }
@@ -83,18 +88,38 @@ public class VimJava {
         }
     }
 
-    private static void drawStatusLine(Screen screen) {
-
-        // Draw status line
+    // Update drawStatusLine to accept mode and fps
+    private static void drawStatusLine(Screen screen, String mode, int fps) {
         int height = screen.getTerminalSize().getRows();
         int width = screen.getTerminalSize().getColumns();
-        String status = "NORMAL"; // or INSERT, etc.
+        String left = mode;
+        String right = "FPS: " + fps;
+        int space = width - left.length() - right.length();
+        String status;
+        if (space > 0) {
+            status = left + " ".repeat(space) + right;
+        } else {
+            status = (left + right).substring(0, width);
+        }
         for (int col = 0; col < width; col++) {
             char ch = col < status.length() ? status.charAt(col) : ' ';
             screen.setCharacter(col, height - 2, TextCharacter.fromCharacter(
                     ch, TextColor.ANSI.WHITE, TextColor.ANSI.BLACK_BRIGHT)[0]);
         }
     }
+
+//    private static void drawStatusLine(Screen screen) {
+//
+//        // Draw status line
+//        int height = screen.getTerminalSize().getRows();
+//        int width = screen.getTerminalSize().getColumns();
+//        String status = "NORMAL"; // or INSERT, etc.
+//        for (int col = 0; col < width; col++) {
+//            char ch = col < status.length() ? status.charAt(col) : ' ';
+//            screen.setCharacter(col, height - 2, TextCharacter.fromCharacter(
+//                    ch, TextColor.ANSI.WHITE, TextColor.ANSI.BLACK_BRIGHT)[0]);
+//        }
+//    }
 
     private static void drawBuffer(Screen screen, ArrayList<String> buffer) {
         int height = screen.getTerminalSize().getRows();
