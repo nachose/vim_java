@@ -2,51 +2,60 @@ package com.jiss.app.display;
 
 import java.util.*;
 
-public class LayoutManager<C> implements ScreenRegion<C> {
-    private final List<Region<C>> regions = new ArrayList<>();
-    private int x, y, width, height;
+public class LayoutManager{
+    private final List<Region> regions = new ArrayList<>();
+    private Region region_;
 
-    public LayoutManager(int x, int y, int width, int height) {
-        this.x = x; this.y = y; this.width = width; this.height = height;
+    public LayoutManager(Region r) {
+        this.region_ = r;
     }
 
-    public void addRegion(Region<C> region) {
+    public void addRegion(Region region) {
         regions.add(region);
     }
 
-    public Region<C> getRegion(String name) {
-        for (Region<C> r : regions) {
+    public void addRegionList(List<Region> regionsList) {
+        for(Region r: regionsList) {
+            addRegion(r);
+        }
+    }
+
+    public Region getRegion(String name) {
+        for (Region r : regions) {
             if (r.getName().equals(name)) return r;
         }
         return null;
     }
 
-    public List<Region<C>> getRegions() {
+    public List<Region> getRegions() {
         return Collections.unmodifiableList(regions);
     }
 
     public void layoutVertical() {
-        int regionHeight = height / Math.max(1, regions.size());
-        int currentY = y;
-        for (Region<C> r : regions) {
-            r.setBounds(x, currentY, width, regionHeight);
+        int regionHeight = region_.getHeight() / Math.max(1, regions.size());
+        int currentY = region_.getY();
+        for (Region r : regions) {
+            r.setBounds(region_.getX(), currentY, region_.getWidth(), regionHeight);
             currentY += regionHeight;
         }
     }
 
     public void layoutHorizontal() {
-        int regionWidth = width / Math.max(1, regions.size());
-        int currentX = x;
-        for (Region<C> r : regions) {
-            r.setBounds(currentX, y, regionWidth, height);
+        int regionWidth = region_.getWidth() / Math.max(1, regions.size());
+        int currentX = region_.getX();
+        for (Region r : regions) {
+            r.setBounds(currentX, region_.getY(), regionWidth, region_.getHeight());
             currentX += regionWidth;
         }
     }
 
-    @Override
-    public void draw(C context) {
-        for (Region<C> r : regions) {
-            r.draw(context);
-        }
+
+    public void draw(WindowContext context) {
+       for(Region r :regions) {
+         if(r instanceof ScreenRegion) {
+             ((ScreenRegion)r).draw(context);
+         }
+       }
     }
+
 }

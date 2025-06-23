@@ -1,6 +1,8 @@
 package com.jiss.app.display;
 
-public class Region<C> implements ScreenRegion<C> {
+import java.lang.IllegalArgumentException;
+
+public class Region {
     protected int x, y, width, height;
     protected String name;
 
@@ -10,6 +12,17 @@ public class Region<C> implements ScreenRegion<C> {
         this.y = y;
         this.width = width;
         this.height = height;
+
+        validate();
+
+    }
+
+    public void validate() {
+       if(name == null || name.isEmpty()) throw new IllegalArgumentException();
+       if(x < 0) throw new IllegalArgumentException();
+       if(y < 0) throw new IllegalArgumentException();
+       if(width <= 0) throw  new IllegalArgumentException();
+       if(height <= 0) throw new IllegalArgumentException();
     }
 
     public String getName() { return name; }
@@ -22,8 +35,4 @@ public class Region<C> implements ScreenRegion<C> {
         this.x = x; this.y = y; this.width = width; this.height = height;
     }
 
-    @Override
-    public void draw(C context) {
-        // Default: do nothing. Subclasses override to render content.
-    }
 }

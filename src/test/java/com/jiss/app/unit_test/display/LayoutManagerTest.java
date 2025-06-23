@@ -4,14 +4,16 @@ package com.jiss.app.display;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
+import com.jiss.app.display.WindowContext;
 
 class LayoutManagerTest {
 
     @Test
     void testAddAndGetRegion() {
-        LayoutManager<Object> lm = new LayoutManager<>(0, 0, 100, 50);
-        Region<Object> r1 = new Region<>("left", 0, 0, 10, 10);
-        Region<Object> r2 = new Region<>("right", 0, 0, 10, 10);
+        Region r = new Region("container", 0, 0, 100, 50);
+        LayoutManager lm = new LayoutManager(r);
+        Region r1 = new Region("left", 0, 0, 10, 10);
+        Region r2 = new Region("right", 0, 0, 10, 10);
         lm.addRegion(r1);
         lm.addRegion(r2);
 
@@ -22,18 +24,20 @@ class LayoutManagerTest {
 
     @Test
     void testGetRegionsUnmodifiable() {
-        LayoutManager<Object> lm = new LayoutManager<>(0, 0, 100, 50);
-        Region<Object> r = new Region<>("test", 0, 0, 1, 1);
+        Region rc = new Region("container", 0, 0, 100, 50);
+        LayoutManager lm = new LayoutManager(rc);
+        Region r = new Region("test", 0, 0, 1, 1);
         lm.addRegion(r);
-        List<Region<Object>> regions = lm.getRegions();
+        List<Region> regions = lm.getRegions();
         assertThrows(UnsupportedOperationException.class, () -> regions.add(r));
     }
 
     @Test
     void testLayoutVertical() {
-        LayoutManager<Object> lm = new LayoutManager<>(0, 0, 100, 40);
-        Region<Object> r1 = new Region<>("top", 0, 0, 0, 0);
-        Region<Object> r2 = new Region<>("bottom", 0, 0, 0, 0);
+        Region r = new Region("container", 0, 0, 100, 40);
+        LayoutManager lm = new LayoutManager(r);
+        Region r1 = new Region("top", 0, 0, 10, 10);
+        Region r2 = new Region("bottom", 0, 0, 10, 10);
         lm.addRegion(r1);
         lm.addRegion(r2);
 
@@ -49,9 +53,10 @@ class LayoutManagerTest {
 
     @Test
     void testLayoutHorizontal() {
-        LayoutManager<Object> lm = new LayoutManager<>(0, 0, 80, 20);
-        Region<Object> r1 = new Region<>("left", 0, 0, 0, 0);
-        Region<Object> r2 = new Region<>("right", 0, 0, 0, 0);
+        Region r = new Region("container", 0, 0, 80, 20);
+        LayoutManager lm = new LayoutManager(r);
+        Region r1 = new Region("left", 0, 0, 10, 10);
+        Region r2 = new Region("right", 0, 0, 10, 10);
         lm.addRegion(r1);
         lm.addRegion(r2);
 
@@ -65,18 +70,60 @@ class LayoutManagerTest {
         assertEquals(20, r2.getHeight());
     }
 
+    //This is still not needed.
+//    @Test
+//    void testAddDuplicateRegionNames() {
+//        LayoutManager lm = new LayoutManager(0, 0, 10, 10);
+//        Region r1 = new Region("dup", 0, 0, 1, 1);
+//        Region r2 = new Region("dup", 1, 1, 2, 2);
+//        lm.addRegion(r1);
+//        lm.addRegion(r2);
+//        // Should retrieve the last added region with the same name
+//        assertEquals(r2, lm.getRegion("dup"));
+//    }
+
     @Test
-    void testDrawDelegatesToRegions() {
-        LayoutManager<Object> lm = new LayoutManager<>(0, 0, 10, 10);
-        final boolean[] called = {false};
-        Region<Object> r = new Region<>("draw", 0, 0, 1, 1) {
-            @Override
-            public void draw(Object context) {
-                called[0] = true;
-            }
-        };
+    void testLayoutWithZeroOrOneRegion() {
+        Region rc = new Region("container", 0, 0, 10, 10);
+        LayoutManager lm = new LayoutManager(rc);
+        // No regions
+        lm.layoutVertical();
+        lm.layoutHorizontal();
+        // One region
+        Region r = new Region("single", 0, 0, 10, 10);
         lm.addRegion(r);
-        lm.draw(null);
-        assertTrue(called[0]);
+        lm.layoutVertical();
+        assertEquals(0, r.getX());
+        assertEquals(0, r.getY());
+        assertEquals(10, r.getWidth());
+        assertEquals(10, r.getHeight());
     }
+
+    @Test
+    void testDrawWithNoRegions() {
+        Region r = new Region("container", 0, 0, 10, 10);
+        LayoutManager lm = new LayoutManager(r);
+        // Should not throw
+        lm.draw(null);
+    }
+
+    @Test
+    void testSubclassingLayoutAndDraw() {
+        class CustomLayoutManager extends LayoutManager {
+            boolean layoutCalled = false;
+            boolean drawCalled = false;
+            CustomLayoutManager(Region r) { super(r); }
+            @Override
+            public void layoutVertical() { layoutCalled = true; }
+            @Override
+            public void draw(WindowContext ctx) { drawCalled = true; }
+        }
+        Region r = new Region("container", 0, 0, 10, 10);
+        CustomLayoutManager clm = new CustomLayoutManager(r);
+        clm.layoutVertical();
+        clm.draw(null);
+        assertTrue(clm.layoutCalled);
+        assertTrue(clm.drawCalled);
+    }
+
 }

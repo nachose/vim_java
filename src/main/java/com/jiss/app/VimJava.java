@@ -19,10 +19,16 @@ import com.jiss.app.util.FpsCounter;
 public class VimJava {
 
     static private KeyHandler handler_ = new KeyHandler();
-    static private ArrayList<ScreenRegion> regions = ScreenRegionFactory.getRegions();
+    static private ArrayList<ScreenRegion> regions = null;
+
+    public VimJava () {
+
+    }
 
 
     public static void main(String[] args) throws Exception {
+
+        VimJava vj = new VimJava();
         try(Screen screen = new DefaultTerminalFactory().createScreen()) {
 
             screen.startScreen();
