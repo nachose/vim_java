@@ -5,6 +5,7 @@ import com.jiss.app.ScreenStatus;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.TerminalPosition;
+import java.util.ArrayList;
 
 import java.io.IOException;
 
@@ -13,7 +14,7 @@ public class NormalModeHandler implements KeyInputHandler {
     public LoopStatus handleTextInput(TerminalPosition pos,
                                KeyStroke key,
                                StringBuilder commandBuffer,
-                               StringBuilder buffer) throws IOException {
+                               ArrayList<String> buffer) throws IOException {
         EditorMode mode = EditorMode.NORMAL;
         boolean running = true;
         if (key.getKeyType() == KeyType.Escape) {
@@ -27,8 +28,11 @@ public class NormalModeHandler implements KeyInputHandler {
             pos = new TerminalPosition(pos.getColumn() - 1, pos.getRow());
         } else if (key.getKeyType() == KeyType.ArrowLeft && pos.getColumn() > 0) {
             pos = new TerminalPosition(pos.getColumn() - 1, pos.getRow());
-        } else if (key.getKeyType() == KeyType.ArrowRight && pos.getColumn() < buffer.length()) {
-            pos = new TerminalPosition(pos.getColumn() + 1, pos.getRow());
+        } else if (key.getKeyType() == KeyType.ArrowRight) {
+            //Only move right if not at the end of the buffer
+            if(pos.getColumn() < buffer.get(pos.getRow()).length()) {
+                pos = new TerminalPosition(pos.getColumn() + 1, pos.getRow());
+            }
         }
         if (key.isShiftDown() && key.getCharacter() == 'v') {
             mode = EditorMode.VISUALLINE;

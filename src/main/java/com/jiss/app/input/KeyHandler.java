@@ -6,6 +6,7 @@ import com.googlecode.lanterna.input.KeyStroke;
 
 import java.io.IOException;
 import java.util.TreeMap;
+import java.util.ArrayList;
 
 public class KeyHandler {
 
@@ -27,7 +28,7 @@ public class KeyHandler {
 
     //TODO: Here, return a WindowContext, instead of a boolean.
     //Build a WindowContext everytime if needed.
-    public boolean handleTextInput(ScreenStatus screen, StringBuilder commandBuffer, StringBuilder buffer) throws IOException {
+    public boolean handleTextInput(ScreenStatus screen, StringBuilder commandBuffer, ArrayList<String> buffer) throws IOException {
         boolean running = true;
         KeyStroke key = screen.getScreen().readInput();
         KeyInputHandler handler = modesMap_.get(mode_);

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -18,7 +19,7 @@ class KeyHandlerTest {
     private KeyHandler keyHandler;
     private ScreenStatus screenStatus;
     private StringBuilder commandBuffer;
-    private StringBuilder buffer;
+    private ArrayList<String> buffer;
     private KeyInputHandler handler;
     private KeyStroke keyStroke;
 
@@ -27,7 +28,7 @@ class KeyHandlerTest {
         keyHandler = new KeyHandler();
         screenStatus = mock(ScreenStatus.class);
         commandBuffer = new StringBuilder();
-        buffer = new StringBuilder();
+        buffer = new ArrayList();
         handler = mock(KeyInputHandler.class);
         keyStroke = mock(KeyStroke.class);
 

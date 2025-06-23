@@ -7,13 +7,14 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.TerminalPosition;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class VisualLineModeHandler implements KeyInputHandler {
     @Override
     public LoopStatus handleTextInput(TerminalPosition pos,
                                KeyStroke key,
                                StringBuilder commandBuffer,
-                               StringBuilder buffer) throws IOException {
+                               ArrayList<String> buffer) throws IOException {
         EditorMode mode = EditorMode.VISUAL;
         boolean running = true;
         if (key.getKeyType() == KeyType.Escape) {
@@ -26,8 +27,11 @@ public class VisualLineModeHandler implements KeyInputHandler {
             pos = new TerminalPosition(pos.getColumn() - 1, pos.getRow());
         } else if (key.getKeyType() == KeyType.ArrowLeft && pos.getColumn() > 0) {
             pos = new TerminalPosition(pos.getColumn() - 1, pos.getRow());
-        } else if (key.getKeyType() == KeyType.ArrowRight && pos.getColumn() < buffer.length()) {
-            pos = new TerminalPosition(pos.getColumn() + 1, pos.getRow());
+        } else if (key.getKeyType() == KeyType.ArrowRight) {
+            //Only move right if not at the end of the buffer
+            if(pos.getColumn() < buffer.get(pos.getRow()).length()) {
+                pos = new TerminalPosition(pos.getColumn() + 1, pos.getRow());
+            }
         } else if (key.getKeyType() == KeyType.EOF) {
             mode = EditorMode.STOPPED;
         }

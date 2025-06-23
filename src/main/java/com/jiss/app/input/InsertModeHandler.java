@@ -7,6 +7,7 @@ import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.TerminalPosition;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class InsertModeHandler implements KeyInputHandler {
@@ -14,25 +15,40 @@ public class InsertModeHandler implements KeyInputHandler {
     public LoopStatus handleTextInput(TerminalPosition pos,
                                KeyStroke key,
                                StringBuilder commandBuffer,
-                               StringBuilder buffer) throws IOException {
+                               ArrayList<String> buffer) throws IOException {
         EditorMode mode = EditorMode.INSERT;
         boolean running = true;
+        StringBuilder currentLine = new StringBuilder(buffer.get(pos.getRow()));
         if (key.getKeyType() == KeyType.Escape) {
             mode = EditorMode.NORMAL;
         } else if( key.getKeyType() == KeyType.Enter ) {
             // Handle Enter key in insert mode, e.g., add a newline
-            buffer.insert(pos.getColumn(), '\n');
+            int first_start = 0;
+            int first_end   = pos.getColumn();
+            int second_start = pos.getColumn();
+            int second_end = currentLine.length();
+            String first = currentLine.substring(first_start, first_end);
+            String second = currentLine.substring(second_start, second_end);
+            buffer.set(pos.getRow(), first);
+            buffer.add(pos.getRow() + 1, second);
             pos = new TerminalPosition(0, pos.getRow() + 1); // Move cursor to next line
         } else if (key.getKeyType() == KeyType.Backspace && pos.getColumn() > 0) {
-            buffer.deleteCharAt(pos.getColumn() - 1);
+            currentLine.deleteCharAt(pos.getColumn() - 1);
             pos = new TerminalPosition(pos.getColumn() -1, pos.getRow());
+            buffer.set(pos.getRow(), currentLine.toString());                                                 //
         } else if (key.getKeyType() == KeyType.Character ) {
-            buffer.insert(pos.getColumn(), key.getCharacter());
+            // currentLine.append(key.getCharacter());
+            currentLine.insert(pos.getColumn(), key.getCharacter());
+//            buffer.insert(pos.getColumn(), key.getCharacter());
             pos = new TerminalPosition(pos.getColumn() + 1, pos.getRow());
+            buffer.set(pos.getRow(), currentLine.toString());                                                 //
         } else if (key.getKeyType() == KeyType.ArrowLeft && pos.getColumn() > 0) {
             pos = new TerminalPosition(pos.getColumn() - 1, pos.getRow());
-        } else if (key.getKeyType() == KeyType.ArrowRight && pos.getColumn() < buffer.length()) {
-            pos = new TerminalPosition(pos.getColumn() + 1, pos.getRow());
+        } else if (key.getKeyType() == KeyType.ArrowRight) {
+            //Only move right if not at the end of the buffer
+            if(pos.getColumn() < buffer.get(pos.getRow()).length()) {
+                pos = new TerminalPosition(pos.getColumn() + 1, pos.getRow());
+            }
         } else if (key.getKeyType() == KeyType.EOF) {
             mode = EditorMode.STOPPED;
         }

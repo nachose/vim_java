@@ -7,6 +7,7 @@ import com.googlecode.lanterna.TerminalPosition;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -21,7 +22,8 @@ class InsertModeHandlerTest {
         when(key.getKeyType()).thenReturn(KeyType.Escape);
         TerminalPosition pos = new TerminalPosition(2, 0);
         StringBuilder commandBuffer = new StringBuilder();
-        StringBuilder buffer = new StringBuilder("abc");
+        ArrayList<String> buffer = new ArrayList();
+        buffer.add("abc");
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
@@ -35,11 +37,12 @@ class InsertModeHandlerTest {
         when(key.getKeyType()).thenReturn(KeyType.Backspace);
         TerminalPosition pos = new TerminalPosition(2, 0);
         StringBuilder commandBuffer = new StringBuilder();
-        StringBuilder buffer = new StringBuilder("abc");
+        ArrayList<String> buffer = new ArrayList();
+        buffer.add("abc");
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
-        assertEquals("ac", buffer.toString());
+        assertEquals("ac", buffer.get(0));
         assertEquals(EditorMode.INSERT, status.mode());
         assertEquals(new TerminalPosition(1, 0), status.pos());
     }
@@ -50,11 +53,12 @@ class InsertModeHandlerTest {
         when(key.getKeyType()).thenReturn(KeyType.Backspace);
         TerminalPosition pos = new TerminalPosition(0, 0);
         StringBuilder commandBuffer = new StringBuilder();
-        StringBuilder buffer = new StringBuilder("abc");
+        ArrayList<String> buffer = new ArrayList();
+        buffer.add("abc");
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
-        assertEquals("abc", buffer.toString());
+        assertEquals("abc", buffer.get(0));
         assertEquals(EditorMode.INSERT, status.mode());
         assertEquals(pos, status.pos());
     }
@@ -66,11 +70,12 @@ class InsertModeHandlerTest {
         when(key.getCharacter()).thenReturn('x');
         TerminalPosition pos = new TerminalPosition(1, 0);
         StringBuilder commandBuffer = new StringBuilder();
-        StringBuilder buffer = new StringBuilder("ab");
+        ArrayList<String> buffer = new ArrayList();
+        buffer.add("ab");
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
-        assertEquals("axb", buffer.toString());
+        assertEquals("axb", buffer.get(0));
         assertEquals(EditorMode.INSERT, status.mode());
         assertEquals(new TerminalPosition(2, 0), status.pos());
     }
@@ -81,7 +86,8 @@ class InsertModeHandlerTest {
         when(key.getKeyType()).thenReturn(KeyType.ArrowLeft);
         TerminalPosition pos = new TerminalPosition(2, 0);
         StringBuilder commandBuffer = new StringBuilder();
-        StringBuilder buffer = new StringBuilder("abc");
+        ArrayList<String> buffer = new ArrayList();
+        buffer.add("abc");
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
@@ -95,7 +101,8 @@ class InsertModeHandlerTest {
         when(key.getKeyType()).thenReturn(KeyType.ArrowLeft);
         TerminalPosition pos = new TerminalPosition(0, 0);
         StringBuilder commandBuffer = new StringBuilder();
-        StringBuilder buffer = new StringBuilder("abc");
+        ArrayList<String> buffer = new ArrayList();
+        buffer.add("abc");
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
@@ -109,7 +116,8 @@ class InsertModeHandlerTest {
         when(key.getKeyType()).thenReturn(KeyType.ArrowRight);
         TerminalPosition pos = new TerminalPosition(1, 0);
         StringBuilder commandBuffer = new StringBuilder();
-        StringBuilder buffer = new StringBuilder("abc");
+        ArrayList<String> buffer = new ArrayList();
+        buffer.add("abc");
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
@@ -123,7 +131,8 @@ class InsertModeHandlerTest {
         when(key.getKeyType()).thenReturn(KeyType.ArrowRight);
         TerminalPosition pos = new TerminalPosition(3, 0);
         StringBuilder commandBuffer = new StringBuilder();
-        StringBuilder buffer = new StringBuilder("abc");
+        ArrayList<String> buffer = new ArrayList();
+        buffer.add("abc");
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
@@ -135,15 +144,20 @@ class InsertModeHandlerTest {
     void testEnterInsertsNewlineAndMovesCursor() throws IOException {
         KeyStroke key = mock(KeyStroke.class);
         when(key.getKeyType()).thenReturn(KeyType.Enter);
-        TerminalPosition pos = new TerminalPosition(2, 1);
+        TerminalPosition pos = new TerminalPosition(2, 0);
         StringBuilder commandBuffer = new StringBuilder();
-        StringBuilder buffer = new StringBuilder("abc");
+        ArrayList<String> buffer = new ArrayList();
+        buffer.add("abc");
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
 
-        assertEquals("ab\nc", buffer.toString());
-        assertEquals(new TerminalPosition(0, 2), status.pos());
+        // Should insert newline at the start, buffer becomes "\nabc"
+        assertEquals(2, buffer.size());
+        assertEquals("ab", buffer.get(0));
+        assertEquals("c", buffer.get(1));
+        assertEquals("[ab, c]", buffer.toString());
+        assertEquals(new TerminalPosition(0, 1), status.pos());
         assertEquals(EditorMode.INSERT, status.mode());
     }
 
@@ -153,7 +167,8 @@ class InsertModeHandlerTest {
         when(key.getKeyType()).thenReturn(KeyType.EOF);
         TerminalPosition pos = new TerminalPosition(0, 0);
         StringBuilder commandBuffer = new StringBuilder();
-        StringBuilder buffer = new StringBuilder();
+        ArrayList<String> buffer = new ArrayList();
+        buffer.add("abc");
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
@@ -168,13 +183,17 @@ class InsertModeHandlerTest {
         // Start at column 0, row 0 (beginning of buffer)
         TerminalPosition pos = new TerminalPosition(0, 0);
         StringBuilder commandBuffer = new StringBuilder();
-        StringBuilder buffer = new StringBuilder("abc");
+        ArrayList<String> buffer = new ArrayList();
+        buffer.add("abc");
 
         InsertModeHandler handler = new InsertModeHandler();
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
         // Should insert newline at the start, buffer becomes "\nabc"
-        assertEquals("\nabc", buffer.toString());
+        assertEquals(2, buffer.size());
+        assertEquals("", buffer.get(0));
+        assertEquals("abc", buffer.get(1));
+        assertEquals("[, abc]", buffer.toString());
         // Cursor should move to start of next line
         assertEquals(new TerminalPosition(0, 1), status.pos());
         assertEquals(EditorMode.INSERT, status.mode());

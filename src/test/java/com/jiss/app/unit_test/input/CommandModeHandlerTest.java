@@ -7,6 +7,7 @@ import com.googlecode.lanterna.TerminalPosition;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -21,7 +22,7 @@ class CommandModeHandlerTest {
         when(key.getKeyType()).thenReturn(KeyType.Escape);
         TerminalPosition pos = new TerminalPosition(2, 0);
         StringBuilder commandBuffer = new StringBuilder();
-        StringBuilder buffer = new StringBuilder();
+        ArrayList<String> buffer = new ArrayList();
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
@@ -36,7 +37,7 @@ class CommandModeHandlerTest {
         when(key.getCharacter()).thenReturn('x');
         TerminalPosition pos = new TerminalPosition(1, 0);
         StringBuilder commandBuffer = new StringBuilder("a");
-        StringBuilder buffer = new StringBuilder();
+        ArrayList<String> buffer = new ArrayList();
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
@@ -51,7 +52,7 @@ class CommandModeHandlerTest {
         when(key.getKeyType()).thenReturn(KeyType.Enter);
         TerminalPosition pos = new TerminalPosition(0, 0);
         StringBuilder commandBuffer = new StringBuilder("cmd");
-        StringBuilder buffer = new StringBuilder();
+        ArrayList<String> buffer = new ArrayList();
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
@@ -66,7 +67,7 @@ class CommandModeHandlerTest {
         when(key.getKeyType()).thenReturn(KeyType.Backspace);
         TerminalPosition pos = new TerminalPosition(2, 0);
         StringBuilder commandBuffer = new StringBuilder("abc");
-        StringBuilder buffer = new StringBuilder();
+        ArrayList<String> buffer = new ArrayList();
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
@@ -81,7 +82,7 @@ class CommandModeHandlerTest {
         when(key.getKeyType()).thenReturn(KeyType.Backspace);
         TerminalPosition pos = new TerminalPosition(0, 0);
         StringBuilder commandBuffer = new StringBuilder("abc");
-        StringBuilder buffer = new StringBuilder();
+        ArrayList<String> buffer = new ArrayList();
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 
@@ -96,7 +97,7 @@ class CommandModeHandlerTest {
         when(key.getKeyType()).thenReturn(KeyType.EOF);
         TerminalPosition pos = new TerminalPosition(0, 0);
         StringBuilder commandBuffer = new StringBuilder();
-        StringBuilder buffer = new StringBuilder();
+        ArrayList<String> buffer = new ArrayList();
 
         LoopStatus status = handler.handleTextInput(pos, key, commandBuffer, buffer);
 

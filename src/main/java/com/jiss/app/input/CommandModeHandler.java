@@ -6,13 +6,14 @@ import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.TerminalPosition;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class CommandModeHandler implements KeyInputHandler {
     @Override
     public LoopStatus handleTextInput(TerminalPosition pos,
                                KeyStroke key,
                                StringBuilder commandBuffer,
-                               StringBuilder buffer) throws IOException {
+                               ArrayList<String> buffer) throws IOException {
 
         EditorMode mode = EditorMode.COMMAND;
         boolean running = true;

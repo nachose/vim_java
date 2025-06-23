@@ -28,7 +28,7 @@ public class VimJava {
             screen.startScreen();
             ScreenStatus screenStatus = new ScreenStatus(screen);
             boolean running = true;
-            StringBuilder buffer = new StringBuilder();
+            ArrayList<String> buffer = new ArrayList<>();
 //            TerminalPosition pos =
 //                    new TerminalPosition(screenStatus.getPosition().getColumn(),
 //                                         screenStatus.getPosition().getRow());
@@ -67,7 +67,7 @@ public class VimJava {
 
     private static boolean handleTextInput(ScreenStatus screen,
                                            StringBuilder commandBuffer,
-                                           StringBuilder buffer) throws IOException {
+                                           ArrayList<String> buffer) throws IOException {
 
         return handler_.handleTextInput(screen, commandBuffer, buffer);
 
@@ -98,23 +98,36 @@ public class VimJava {
         }
     }
 
-    private static void drawBuffer(Screen screen, StringBuilder buffer) throws InterruptedException {
-        // Draw buffer (avoid last two lines)
+    private static void drawBuffer(Screen screen, ArrayList<String> buffer) {
         int height = screen.getTerminalSize().getRows();
-        // int width = screen.getTerminalSize().getColumns();
-        int line = 0;
-        int column = 0;
-        for (int i = 0; i < buffer.length() && i < height - 2; i++) {
-            if (buffer.charAt(i) == '\n') {
-                line++;
-                //drawDebugginErrorMessage(screen, "New line detected at index: " + i);
-                column = 0; // Reset column for new line
-                continue; // Skip newline characters
+        int width = screen.getTerminalSize().getColumns();
+        // Draw each line, avoid last two lines (status and command)
+        for (int line = 0; line < buffer.size() && line < height - 2; line++) {
+            String textLine = buffer.get(line);
+            for (int col = 0; col < textLine.length() && col < width; col++) {
+                screen.setCharacter(col, line, TextCharacter.fromCharacter(
+                        textLine.charAt(col), TextColor.ANSI.WHITE, TextColor.ANSI.BLACK)[0]);
             }
-            screen.setCharacter(column++, line, TextCharacter.fromCharacter(
-                    buffer.charAt(i), TextColor.ANSI.WHITE, TextColor.ANSI.BLACK)[0]);
         }
     }
+
+//    private static void drawBuffer(Screen screen, ArrayList<String> buffer) throws InterruptedException {
+//        // Draw buffer (avoid last two lines)
+//        int height = screen.getTerminalSize().getRows();
+//        // int width = screen.getTerminalSize().getColumns();
+//        int line = 0;
+//        int column = 0;
+//        for (int i = 0; i < buffer.length() && i < height - 2; i++) {
+//            if (buffer.charAt(i) == '\n') {
+//                line++;
+//                //drawDebugginErrorMessage(screen, "New line detected at index: " + i);
+//                column = 0; // Reset column for new line
+//                continue; // Skip newline characters
+//            }
+//            screen.setCharacter(column++, line, TextCharacter.fromCharacter(
+//                    buffer.charAt(i), TextColor.ANSI.WHITE, TextColor.ANSI.BLACK)[0]);
+//        }
+//    }
 
     private static void drawDebuggingErrorMessage(Screen screen, String message) throws InterruptedException {
         drawMessage(screen, message);
