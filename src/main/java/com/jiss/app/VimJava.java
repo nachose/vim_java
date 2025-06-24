@@ -1,17 +1,18 @@
 package com.jiss.app;
 
 
-//import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.TextCharacter;
+import com.googlecode.lanterna.TerminalPosition;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import com.jiss.app.display.ScreenRegion;
 
 import com.jiss.app.display.ScreenRegionFactory;
+import com.jiss.app.display.WindowContext;
 import com.jiss.app.input.KeyHandler;
 import com.jiss.app.input.LoopStatus;
 import com.jiss.app.util.FpsCounter;
@@ -43,14 +44,16 @@ public class VimJava {
             while (running) {
                 clearScreen(screen);
 
-                drawRegions(screen);
-//                drawBuffer(screen, buffer);
+                WindowContext context = createWindowContext(screen,
+                                                            mode,
+                                                            screenStatus.getPosition(),
+                                                            buffer,
+                                                            commandBuffer,
+                                                            counter.getFps());
+                drawRegions(screen, context);
 
                 // Example usage in main loop
                 counter.increment();
-//                drawStatusLine(screen, mode.getModeStr(), counter.getFps());
-
-//                drawCommandLine(screen, commandBuffer);
 
                 drawCursor(screenStatus);
 
@@ -84,90 +87,31 @@ public class VimJava {
 
     }
 
-    private static void drawRegions(Screen screen) {
+    private static WindowContext createWindowContext(Screen screen,
+                         EditorMode mode,
+                         TerminalPosition position,
+                         ArrayList<String> buffer,
+                         StringBuilder commandBuffer,
+                         int fps) {
+        return new WindowContext(screen,
+                                 mode,
+                                 buffer,
+                                 commandBuffer,
+                                 position,
+                                 fps);
+    }
+
+    private static void drawRegions(Screen screen, WindowContext context) {
         if (regions == null) {
             regions = ScreenRegionFactory.createRegions(screen);
         }
         for (ScreenRegion region : regions) {
-            region.draw(screen);
+            region.draw(context);
         }
     }
 
-//    private static void drawCommandLine(Screen screen, StringBuilder commandBuffer) {
-//        // Draw command line
-//        int height = screen.getTerminalSize().getRows();
-//        int width = screen.getTerminalSize().getColumns();
-//        String commandPrompt = ":" + commandBuffer.toString();
-//        for (int col = 0; col < width; col++) {
-//            char ch = col < commandPrompt.length() ? commandPrompt.charAt(col) : ' ';
-//            screen.setCharacter(col, height - 1, TextCharacter.fromCharacter(
-//                    ch, TextColor.ANSI.WHITE, TextColor.ANSI.BLACK)[0]);
-//        }
-//    }
 
-    // Update drawStatusLine to accept mode and fps
-//    private static void drawStatusLine(Screen screen, String mode, int fps) {
-//        int height = screen.getTerminalSize().getRows();
-//        int width = screen.getTerminalSize().getColumns();
-//        String left = mode;
-//        String right = "FPS: " + fps;
-//        int space = width - left.length() - right.length();
-//        String status;
-//        if (space > 0) {
-//            status = left + " ".repeat(space) + right;
-//        } else {
-//            status = (left + right).substring(0, width);
-//        }
-//        for (int col = 0; col < width; col++) {
-//            char ch = col < status.length() ? status.charAt(col) : ' ';
-//            screen.setCharacter(col, height - 2, TextCharacter.fromCharacter(
-//                    ch, TextColor.ANSI.WHITE, TextColor.ANSI.BLACK_BRIGHT)[0]);
-//        }
-//    }
 
-//    private static void drawStatusLine(Screen screen) {
-//
-//        // Draw status line
-//        int height = screen.getTerminalSize().getRows();
-//        int width = screen.getTerminalSize().getColumns();
-//        String status = "NORMAL"; // or INSERT, etc.
-//        for (int col = 0; col < width; col++) {
-//            char ch = col < status.length() ? status.charAt(col) : ' ';
-//            screen.setCharacter(col, height - 2, TextCharacter.fromCharacter(
-//                    ch, TextColor.ANSI.WHITE, TextColor.ANSI.BLACK_BRIGHT)[0]);
-//        }
-//    }
-
-//    private static void drawBuffer(Screen screen, ArrayList<String> buffer) {
-//        int height = screen.getTerminalSize().getRows();
-//        int width = screen.getTerminalSize().getColumns();
-//        // Draw each line, avoid last two lines (status and command)
-//        for (int line = 0; line < buffer.size() && line < height - 2; line++) {
-//            String textLine = buffer.get(line);
-//            for (int col = 0; col < textLine.length() && col < width; col++) {
-//                screen.setCharacter(col, line, TextCharacter.fromCharacter(
-//                        textLine.charAt(col), TextColor.ANSI.WHITE, TextColor.ANSI.BLACK)[0]);
-//            }
-//        }
-//    }
-
-//    private static void drawBuffer(Screen screen, ArrayList<String> buffer) throws InterruptedException {
-//        // Draw buffer (avoid last two lines)
-//        int height = screen.getTerminalSize().getRows();
-//        // int width = screen.getTerminalSize().getColumns();
-//        int line = 0;
-//        int column = 0;
-//        for (int i = 0; i < buffer.length() && i < height - 2; i++) {
-//            if (buffer.charAt(i) == '\n') {
-//                line++;
-//                //drawDebugginErrorMessage(screen, "New line detected at index: " + i);
-//                column = 0; // Reset column for new line
-//                continue; // Skip newline characters
-//            }
-//            screen.setCharacter(column++, line, TextCharacter.fromCharacter(
-//                    buffer.charAt(i), TextColor.ANSI.WHITE, TextColor.ANSI.BLACK)[0]);
-//        }
-//    }
 
     private static void drawDebuggingErrorMessage(Screen screen, String message) throws InterruptedException {
         drawMessage(screen, message);
