@@ -1,6 +1,7 @@
 package com.jiss.app.display;
 
 import com.jiss.app.EditorMode;
+import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.TerminalPosition;
 import java.util.ArrayList;
 
@@ -12,17 +13,25 @@ public class WindowContext implements StatusLineContext,
     private final ArrayList<String> buffer;
     private final StringBuilder commandBuffer;
     private final TerminalPosition position;
+    private final Screen screen;
+    private final int fps;
 
-    public WindowContext(EditorMode mode,
+    public WindowContext(Screen screen,
+                         EditorMode mode,
                          ArrayList<String> buffer,
                          StringBuilder commandBuffer,
-                         TerminalPosition position) {
+                         TerminalPosition position,
+                         int fps) {
+        this.screen = screen;
         this.mode = mode;
         this.buffer = buffer;
         this.commandBuffer = commandBuffer;
         this.position = position;
+        this.fps = fps;
     }
 
+    @Override
+    public Screen getScreen() { return screen; }
     @Override
     public EditorMode getMode() { return mode; }
     @Override
@@ -31,4 +40,6 @@ public class WindowContext implements StatusLineContext,
     public StringBuilder getCommandBuffer() { return commandBuffer; }
     @Override
     public TerminalPosition getPosition() { return position; }
+    @Override
+    public int getFps() { return fps; }
 }

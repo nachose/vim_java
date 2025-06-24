@@ -27,7 +27,9 @@ public class Region {
 
     public String getName() { return name; }
     public int getX() { return x; }
+    public int getXMax() {return x + width;}
     public int getY() { return y; }
+    public int getYMax() { return y + height;}
     public int getWidth() { return width; }
     public int getHeight() { return height; }
 

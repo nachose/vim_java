@@ -12,7 +12,7 @@ class ScreenRegionFactoryTest {
     @Test
     void testCreateScreenRegion() throws Exception {
         try(Screen screen = new DefaultTerminalFactory().createScreen()) {
-            List<ScreenRegion> ret = ScreenRegionFactory.CreateRegions(screen);
+            List<ScreenRegion> ret = ScreenRegionFactory.createRegions(screen);
             assertEquals(ret.size(), 3);
         }
     }
@@ -20,7 +20,7 @@ class ScreenRegionFactoryTest {
     @Test
     void testCreateFromnRegion() throws Exception {
         Region reg = new Region("hola", 3, 4, 20, 30);
-        List<ScreenRegion> ret = ScreenRegionFactory.CreateRegions(reg);
+        List<ScreenRegion> ret = ScreenRegionFactory.createRegions(reg);
         assertEquals(ret.size(), 3);
     }
 

@@ -10,7 +10,7 @@ import java.util.List;
 public class ScreenRegionFactory {
 
 
-    public static List<ScreenRegion> CreateRegions(Screen screen) {
+    public static List<ScreenRegion> createRegions(Screen screen) {
 
         int height = screen.getTerminalSize().getRows();
         int width = screen.getTerminalSize().getColumns();
@@ -29,7 +29,7 @@ public class ScreenRegionFactory {
 
     }
 
-    public static List<ScreenRegion> CreateRegions(Region region) {
+    public static List<ScreenRegion> createRegions(Region region) {
 
         int height = region.getHeight();
         int width = region.getWidth();

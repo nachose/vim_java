@@ -8,6 +8,7 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.TextCharacter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import com.jiss.app.display.ScreenRegion;
 
 import com.jiss.app.display.ScreenRegionFactory;
@@ -19,7 +20,7 @@ import com.jiss.app.util.FpsCounter;
 public class VimJava {
 
     static private KeyHandler handler_ = new KeyHandler();
-    static private ArrayList<ScreenRegion> regions = null;
+    static private List<ScreenRegion> regions = null;
 
     public VimJava () {
 
@@ -42,13 +43,14 @@ public class VimJava {
             while (running) {
                 clearScreen(screen);
 
-                drawBuffer(screen, buffer);
+                drawRegions(screen);
+//                drawBuffer(screen, buffer);
 
                 // Example usage in main loop
                 counter.increment();
-                drawStatusLine(screen, mode.getModeStr(), counter.getFps());
+//                drawStatusLine(screen, mode.getModeStr(), counter.getFps());
 
-                drawCommandLine(screen, commandBuffer);
+//                drawCommandLine(screen, commandBuffer);
 
                 drawCursor(screenStatus);
 
@@ -82,37 +84,46 @@ public class VimJava {
 
     }
 
-    private static void drawCommandLine(Screen screen, StringBuilder commandBuffer) {
-        // Draw command line
-        int height = screen.getTerminalSize().getRows();
-        int width = screen.getTerminalSize().getColumns();
-        String commandPrompt = ":" + commandBuffer.toString();
-        for (int col = 0; col < width; col++) {
-            char ch = col < commandPrompt.length() ? commandPrompt.charAt(col) : ' ';
-            screen.setCharacter(col, height - 1, TextCharacter.fromCharacter(
-                    ch, TextColor.ANSI.WHITE, TextColor.ANSI.BLACK)[0]);
+    private static void drawRegions(Screen screen) {
+        if (regions == null) {
+            regions = ScreenRegionFactory.createRegions(screen);
+        }
+        for (ScreenRegion region : regions) {
+            region.draw(screen);
         }
     }
 
+//    private static void drawCommandLine(Screen screen, StringBuilder commandBuffer) {
+//        // Draw command line
+//        int height = screen.getTerminalSize().getRows();
+//        int width = screen.getTerminalSize().getColumns();
+//        String commandPrompt = ":" + commandBuffer.toString();
+//        for (int col = 0; col < width; col++) {
+//            char ch = col < commandPrompt.length() ? commandPrompt.charAt(col) : ' ';
+//            screen.setCharacter(col, height - 1, TextCharacter.fromCharacter(
+//                    ch, TextColor.ANSI.WHITE, TextColor.ANSI.BLACK)[0]);
+//        }
+//    }
+
     // Update drawStatusLine to accept mode and fps
-    private static void drawStatusLine(Screen screen, String mode, int fps) {
-        int height = screen.getTerminalSize().getRows();
-        int width = screen.getTerminalSize().getColumns();
-        String left = mode;
-        String right = "FPS: " + fps;
-        int space = width - left.length() - right.length();
-        String status;
-        if (space > 0) {
-            status = left + " ".repeat(space) + right;
-        } else {
-            status = (left + right).substring(0, width);
-        }
-        for (int col = 0; col < width; col++) {
-            char ch = col < status.length() ? status.charAt(col) : ' ';
-            screen.setCharacter(col, height - 2, TextCharacter.fromCharacter(
-                    ch, TextColor.ANSI.WHITE, TextColor.ANSI.BLACK_BRIGHT)[0]);
-        }
-    }
+//    private static void drawStatusLine(Screen screen, String mode, int fps) {
+//        int height = screen.getTerminalSize().getRows();
+//        int width = screen.getTerminalSize().getColumns();
+//        String left = mode;
+//        String right = "FPS: " + fps;
+//        int space = width - left.length() - right.length();
+//        String status;
+//        if (space > 0) {
+//            status = left + " ".repeat(space) + right;
+//        } else {
+//            status = (left + right).substring(0, width);
+//        }
+//        for (int col = 0; col < width; col++) {
+//            char ch = col < status.length() ? status.charAt(col) : ' ';
+//            screen.setCharacter(col, height - 2, TextCharacter.fromCharacter(
+//                    ch, TextColor.ANSI.WHITE, TextColor.ANSI.BLACK_BRIGHT)[0]);
+//        }
+//    }
 
 //    private static void drawStatusLine(Screen screen) {
 //
@@ -127,18 +138,18 @@ public class VimJava {
 //        }
 //    }
 
-    private static void drawBuffer(Screen screen, ArrayList<String> buffer) {
-        int height = screen.getTerminalSize().getRows();
-        int width = screen.getTerminalSize().getColumns();
-        // Draw each line, avoid last two lines (status and command)
-        for (int line = 0; line < buffer.size() && line < height - 2; line++) {
-            String textLine = buffer.get(line);
-            for (int col = 0; col < textLine.length() && col < width; col++) {
-                screen.setCharacter(col, line, TextCharacter.fromCharacter(
-                        textLine.charAt(col), TextColor.ANSI.WHITE, TextColor.ANSI.BLACK)[0]);
-            }
-        }
-    }
+//    private static void drawBuffer(Screen screen, ArrayList<String> buffer) {
+//        int height = screen.getTerminalSize().getRows();
+//        int width = screen.getTerminalSize().getColumns();
+//        // Draw each line, avoid last two lines (status and command)
+//        for (int line = 0; line < buffer.size() && line < height - 2; line++) {
+//            String textLine = buffer.get(line);
+//            for (int col = 0; col < textLine.length() && col < width; col++) {
+//                screen.setCharacter(col, line, TextCharacter.fromCharacter(
+//                        textLine.charAt(col), TextColor.ANSI.WHITE, TextColor.ANSI.BLACK)[0]);
+//            }
+//        }
+//    }
 
 //    private static void drawBuffer(Screen screen, ArrayList<String> buffer) throws InterruptedException {
 //        // Draw buffer (avoid last two lines)
