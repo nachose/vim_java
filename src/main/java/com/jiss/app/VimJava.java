@@ -42,24 +42,24 @@ public class VimJava {
             EditorMode mode = EditorMode.NORMAL;
 
             while (running) {
-                clearScreen(screen);
+                vj.clearScreen(screen);
 
-                WindowContext context = createWindowContext(screen,
+                WindowContext context = vj.createWindowContext(screen,
                                                             mode,
                                                             screenStatus.getPosition(),
                                                             buffer,
                                                             commandBuffer,
                                                             counter.getFps());
-                drawRegions(screen, context);
+                vj.drawRegions(screen, context);
 
                 // Example usage in main loop
                 counter.increment();
 
-                drawCursor(screenStatus);
+                vj.drawCursor(screenStatus);
 
-                refreshScreen(screen);
+                vj.refreshScreen(screen);
 
-                LoopStatus status = handleTextInput(screenStatus, commandBuffer, buffer);
+                LoopStatus status = vj.handleTextInput(screenStatus, commandBuffer, buffer);
                 running = status.mode() != EditorMode.STOPPED;
                 mode = status.mode();
             }
@@ -67,32 +67,32 @@ public class VimJava {
         }
     }
 
-    private static void drawCursor(ScreenStatus screenStatus) {
+    private void drawCursor(ScreenStatus screenStatus) {
         screenStatus.updatePostion();
     }
 
-    private static void clearScreen(Screen screen) throws IOException {
+    private void clearScreen(Screen screen) throws IOException {
         screen.clear();
     }
 
-    private static void refreshScreen(Screen screen) throws IOException {
+    private void refreshScreen(Screen screen) throws IOException {
         screen.refresh(Screen.RefreshType.AUTOMATIC);
     }
 
-    private static LoopStatus handleTextInput(ScreenStatus screen,
-                                           StringBuilder commandBuffer,
-                                           ArrayList<String> buffer) throws IOException {
+    private LoopStatus handleTextInput(ScreenStatus screen,
+                                       StringBuilder commandBuffer,
+                                       ArrayList<String> buffer) throws IOException {
 
         return handler_.handleTextInput(screen, commandBuffer, buffer);
 
     }
 
-    private static WindowContext createWindowContext(Screen screen,
-                         EditorMode mode,
-                         TerminalPosition position,
-                         ArrayList<String> buffer,
-                         StringBuilder commandBuffer,
-                         int fps) {
+    private WindowContext createWindowContext(Screen screen,
+                                              EditorMode mode,
+                                              TerminalPosition position,
+                                              ArrayList<String> buffer,
+                                              StringBuilder commandBuffer,
+                                              int fps) {
         return new WindowContext(screen,
                                  mode,
                                  buffer,
@@ -101,7 +101,7 @@ public class VimJava {
                                  fps);
     }
 
-    private static void drawRegions(Screen screen, WindowContext context) {
+    private void drawRegions(Screen screen, WindowContext context) {
         if (regions == null) {
             regions = ScreenRegionFactory.createRegions(screen);
         }
@@ -113,14 +113,14 @@ public class VimJava {
 
 
 
-    private static void drawDebuggingErrorMessage(Screen screen, String message) throws InterruptedException {
+    private void drawDebuggingErrorMessage(Screen screen, String message) throws InterruptedException {
         drawMessage(screen, message);
         Thread.sleep(3000);
         drawMessage(screen, "");
     }
 
     // Draws a message in the command line region (bottom line)
-    private static void drawMessage(Screen screen, String message) {
+    private void drawMessage(Screen screen, String message) {
         int height = screen.getTerminalSize().getRows();
         int width = screen.getTerminalSize().getColumns();
         for (int col = 0; col < width; col++) {

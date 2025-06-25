@@ -21,8 +21,7 @@ public class CommandModeHandler implements KeyInputHandler<CommandContext> {
         } else if (key.getKeyType() == KeyType.Character ) {
             commandBuffer.append(key.getCharacter());
         } else if (key.getKeyType() == KeyType.Enter ) {
-            // Execute command (for now, just print it)
-            System.out.println("Command: " + commandBuffer.toString());
+            processCommand(commandBuffer.toString());
             commandBuffer.setLength(0); // Clear command buffer
         } else if (key.getKeyType() == KeyType.Backspace && pos.getColumn() > 0) {
             commandBuffer.deleteCharAt(pos.getColumn() - 1);
@@ -31,6 +30,28 @@ public class CommandModeHandler implements KeyInputHandler<CommandContext> {
             mode = EditorMode.STOPPED;
         }
         return new LoopStatus( mode, pos);
+    }
+
+    private void processCommand(String command) {
+        // Here you would implement the logic to process the command.
+        // For now, we just print it to the console.
+        System.out.println("Processing command: " + command);
+
+        if (command.equals("q")) {
+            // Handle quit command
+            System.out.println("Quitting the editor.");
+            // You might want to set a flag or throw an exception to stop the editor loop.
+        } else if (command.startsWith("w ")) {
+            // Handle write command
+            System.out.println("Writing changes to file.");
+            // Implement file writing logic here.
+        } else if (command.startsWith("e ")) {
+            // Handle write command
+            System.out.println("Writing changes to file.");
+            // Implement file reading logic here.
+        } else {
+            System.out.println("Unknown command: " + command);
+        }
     }
 
 }
