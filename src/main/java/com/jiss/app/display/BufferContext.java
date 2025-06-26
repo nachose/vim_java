@@ -2,10 +2,10 @@ package com.jiss.app.display;
 
 import com.jiss.app.EditorMode;
 import com.googlecode.lanterna.screen.Screen;
-import java.util.ArrayList;
+import java.util.List;
 
 public interface BufferContext {
     Screen getScreen();
-    ArrayList<String> getBuffer();
+    List<String> getBuffer();
     EditorMode getMode();
 }

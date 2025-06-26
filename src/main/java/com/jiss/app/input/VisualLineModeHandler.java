@@ -7,7 +7,7 @@ import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.TerminalPosition;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 public class VisualLineModeHandler implements KeyInputHandler<VisualContext> {
     @Override
@@ -15,7 +15,7 @@ public class VisualLineModeHandler implements KeyInputHandler<VisualContext> {
         EditorMode mode = EditorMode.VISUAL;
         KeyStroke key = context.getKeyStroke();
         TerminalPosition pos = context.getTerminalPosition();
-        ArrayList<String> buffer = context.getBuffer();
+        List<String> buffer = context.getBuffer();
         StringBuilder commandBuffer = context.getCommandBuffer();
         if (key.getKeyType() == KeyType.Escape) {
             mode = EditorMode.NORMAL;

@@ -4,7 +4,7 @@ import com.jiss.app.EditorMode;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.TerminalPosition;
-import java.util.ArrayList;
+import java.util.List;
 
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ public class NormalModeHandler implements KeyInputHandler<NormalContext> {
         EditorMode mode = EditorMode.NORMAL;
         KeyStroke key = context.getKeyStroke();
         TerminalPosition pos = context.getTerminalPosition();
-        ArrayList<String> buffer = context.getBuffer();
+        List<String> buffer = context.getBuffer();
         StringBuilder commandBuffer = context.getCommandBuffer();
         if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'i') {
             mode = EditorMode.INSERT;

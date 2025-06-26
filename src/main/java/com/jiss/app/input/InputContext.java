@@ -4,7 +4,7 @@ import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.input.KeyStroke;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 public class InputContext implements InsertContext,
                                      NormalContext,
@@ -15,12 +15,12 @@ public class InputContext implements InsertContext,
     private TerminalPosition pos;
     private KeyStroke key;
     private StringBuilder commandBuffer;
-    private ArrayList<String> buffer;
+    private List<String> buffer;
 
     public InputContext(TerminalPosition pos,
                         KeyStroke key,
                         StringBuilder commandBuffer,
-                        ArrayList<String> buffer) {
+                        List<String> buffer) {
         this.pos = pos;
         this.key = key;
         this.commandBuffer = commandBuffer;
@@ -43,7 +43,7 @@ public class InputContext implements InsertContext,
     }
 
     @Override
-    public ArrayList<String> getBuffer() {
+    public List<String> getBuffer() {
         return buffer;
     }
 

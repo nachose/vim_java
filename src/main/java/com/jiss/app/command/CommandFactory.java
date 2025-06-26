@@ -14,6 +14,10 @@ public class CommandFactory {
             String filename = input.substring(2).trim();
             return new WriteCommand(buffer, filename);
         }
+        else if(input.startsWith("e ")) {
+            String filename = input.substring(2).trim();
+            return new ReadCommand(buffer, filename);
+        }
         // Add more commands as needed
         return null;
     }

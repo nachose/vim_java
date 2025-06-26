@@ -20,36 +20,44 @@ import com.jiss.app.util.FpsCounter;
 
 public class VimJava {
 
-    static private KeyHandler handler_ = new KeyHandler();
-    static private List<ScreenRegion> regions = null;
+    private KeyHandler handler_ = null;
+    private List<ScreenRegion> regions_ = null;
+    private Screen screen_ = null;
+    private ArrayList<String> buffer_ = null;
 
-    public VimJava () {
+    public VimJava (Screen screen) {
+        this.screen_ = screen;
+        regions_ = ScreenRegionFactory.createRegions(screen);
+
+        buffer_ = new ArrayList<String>();
+        handler_ = new KeyHandler(buffer_);
+
+        //Continue removing buffer instances and pushing it into handler_
+
 
     }
 
 
     public static void main(String[] args) throws Exception {
 
-        VimJava vj = new VimJava();
-        try(Screen screen = new DefaultTerminalFactory().createScreen()) {
+        try(Screen screen = new DefaultTerminalFactory().createScreen()){
+            VimJava vj = new VimJava(screen);
 
             screen.startScreen();
             ScreenStatus screenStatus = new ScreenStatus(screen);
             boolean running = true;
-            ArrayList<String> buffer = new ArrayList<>();
             StringBuilder commandBuffer = new StringBuilder();
             FpsCounter counter = new FpsCounter();
             EditorMode mode = EditorMode.NORMAL;
 
             while (running) {
-                vj.clearScreen(screen);
+                vj.clearScreen();
 
-                WindowContext context = vj.createWindowContext(screen,
-                                                            mode,
-                                                            screenStatus.getPosition(),
-                                                            buffer,
-                                                            commandBuffer,
-                                                            counter.getFps());
+                WindowContext context = vj.createWindowContext(
+                        mode,
+                        screenStatus.getPosition(),
+                        commandBuffer,
+                        counter.getFps());
                 vj.drawRegions(screen, context);
 
                 // Example usage in main loop
@@ -57,9 +65,9 @@ public class VimJava {
 
                 vj.drawCursor(screenStatus);
 
-                vj.refreshScreen(screen);
+                vj.refreshScreen();
 
-                LoopStatus status = vj.handleTextInput(screenStatus, commandBuffer, buffer);
+                LoopStatus status = vj.handleTextInput(screenStatus, commandBuffer);
                 running = status.mode() != EditorMode.STOPPED;
                 mode = status.mode();
             }
@@ -71,41 +79,35 @@ public class VimJava {
         screenStatus.updatePostion();
     }
 
-    private void clearScreen(Screen screen) throws IOException {
-        screen.clear();
+    private void clearScreen() throws IOException {
+        screen_.clear();
     }
 
-    private void refreshScreen(Screen screen) throws IOException {
-        screen.refresh(Screen.RefreshType.AUTOMATIC);
+    private void refreshScreen() throws IOException {
+        screen_.refresh(Screen.RefreshType.AUTOMATIC);
     }
 
     private LoopStatus handleTextInput(ScreenStatus screen,
-                                       StringBuilder commandBuffer,
-                                       ArrayList<String> buffer) throws IOException {
+                                       StringBuilder commandBuffer) throws IOException {
 
-        return handler_.handleTextInput(screen, commandBuffer, buffer);
+        return handler_.handleTextInput(screen, commandBuffer);
 
     }
 
-    private WindowContext createWindowContext(Screen screen,
-                                              EditorMode mode,
+    private WindowContext createWindowContext(EditorMode mode,
                                               TerminalPosition position,
-                                              ArrayList<String> buffer,
                                               StringBuilder commandBuffer,
                                               int fps) {
-        return new WindowContext(screen,
+        return new WindowContext(screen_,
                                  mode,
-                                 buffer,
+                                 buffer_,
                                  commandBuffer,
                                  position,
                                  fps);
     }
 
     private void drawRegions(Screen screen, WindowContext context) {
-        if (regions == null) {
-            regions = ScreenRegionFactory.createRegions(screen);
-        }
-        for (ScreenRegion region : regions) {
+        for (ScreenRegion region : regions_) {
             region.draw(context);
         }
     }

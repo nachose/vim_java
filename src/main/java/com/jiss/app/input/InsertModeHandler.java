@@ -7,7 +7,7 @@ import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.TerminalPosition;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 
 public class InsertModeHandler implements KeyInputHandler<InsertContext> {
@@ -16,7 +16,7 @@ public class InsertModeHandler implements KeyInputHandler<InsertContext> {
         EditorMode mode = EditorMode.INSERT;
         KeyStroke key = context.getKeyStroke();
         TerminalPosition pos = context.getTerminalPosition();
-        ArrayList<String> buffer = context.getBuffer();
+        List<String> buffer = context.getBuffer();
         if(buffer.isEmpty()) {
             buffer.add("");
         }
