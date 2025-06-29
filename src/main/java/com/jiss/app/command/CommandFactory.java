@@ -1,7 +1,9 @@
 package com.jiss.app.command;
 
 import java.util.List;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CommandFactory {
     private final List<String> buffer;
 

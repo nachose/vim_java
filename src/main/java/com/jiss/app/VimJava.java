@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import com.jiss.app.display.ScreenRegion;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+
 
 import com.jiss.app.display.ScreenRegionFactory;
 import com.jiss.app.display.WindowContext;
@@ -40,6 +43,7 @@ public class VimJava {
 
     public static void main(String[] args) throws Exception {
 
+        AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext("com.jiss.app");
         try(Screen screen = new DefaultTerminalFactory().createScreen()){
             VimJava vj = new VimJava(screen);
 
@@ -73,6 +77,7 @@ public class VimJava {
             }
             screen.stopScreen();
         }
+        appContext.close();
     }
 
     private void drawCursor(ScreenStatus screenStatus) {

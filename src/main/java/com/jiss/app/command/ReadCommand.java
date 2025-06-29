@@ -15,11 +15,11 @@ public class ReadCommand implements EditorCommand {
 
     @Override
     public void execute() {
-//        FileIOUtil.readFileAsync(Paths.get(filename)).thenAccept(lines -> {
-//            buffer.setLines(lines);
-//        }).exceptionally(ex -> {
-//            // Handle error (e.g., notify user)
-//            return null;
-//        });
+        FileIOUtil.readFileAsync(Paths.get(filename)).thenAccept(lines -> {
+            buffer.addAll(lines);
+        }).exceptionally(ex -> {
+            // Handle error (e.g., notify user)
+            return null;
+        });
     }
 }

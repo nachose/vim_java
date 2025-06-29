@@ -2,6 +2,7 @@ package com.jiss.app.input;
 
 import com.jiss.app.EditorMode;
 import com.jiss.app.ScreenStatus;
+import com.jiss.app.command.CommandFactory;
 import com.googlecode.lanterna.input.KeyStroke;
 
 import java.io.IOException;
@@ -14,10 +15,11 @@ public class KeyHandler {
     private EditorMode mode_;
     private List<String> buffer_;
     private final TreeMap<EditorMode, KeyInputHandler> modesMap_ = new TreeMap<>();
+    private CommandFactory cfactory_;
 
     private void initKeyHandlers() {
         modesMap_.put(EditorMode.INSERT, new InsertModeHandler());
-        modesMap_.put(EditorMode.COMMAND, new CommandModeHandler());
+        modesMap_.put(EditorMode.COMMAND, new CommandModeHandler(cfactory_));
         modesMap_.put(EditorMode.VISUAL, new VisualModeHandler());
         modesMap_.put(EditorMode.NORMAL, new NormalModeHandler());
         modesMap_.put(EditorMode.VISUALLINE, new VisualLineModeHandler());
@@ -36,8 +38,9 @@ public class KeyHandler {
 
     public KeyHandler(List<String> buffer) {
         mode_ = EditorMode.NORMAL;
-        this.initKeyHandlers();
         this.buffer_ = buffer;
+        this.cfactory_ = new CommandFactory(buffer);
+        this.initKeyHandlers();
     }
 
     //TODO: Here, return a WindowContext, instead of a boolean.

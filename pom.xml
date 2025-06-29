@@ -52,6 +52,11 @@
       <version>5.8.0</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>6.1.6</version>
+    </dependency>
 
     <dependency>
       <groupId>com.googlecode.lanterna</groupId>

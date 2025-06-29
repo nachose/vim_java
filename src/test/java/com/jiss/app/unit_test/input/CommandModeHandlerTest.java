@@ -4,6 +4,8 @@ import com.jiss.app.EditorMode;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.TerminalPosition;
+import com.jiss.app.command.CommandFactory;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import com.jiss.app.input.InputContext;
 
@@ -15,7 +17,13 @@ import static org.mockito.Mockito.*;
 
 class CommandModeHandlerTest {
 
-    private final CommandModeHandler handler = new CommandModeHandler();
+    private CommandModeHandler handler;
+    @BeforeEach
+    void setUp() {
+        if(handler == null) {
+            handler = new CommandModeHandler(new CommandFactory(new ArrayList<String>()));
+        }
+    }
 
     @Test
     void testEscapeSwitchesToNormalMode() throws IOException {

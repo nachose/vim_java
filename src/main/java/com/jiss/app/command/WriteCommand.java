@@ -1,5 +1,7 @@
 package com.jiss.app.command;
 
+import com.jiss.app.nio.FileIOUtil;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class WriteCommand implements EditorCommand {
@@ -14,6 +16,6 @@ public class WriteCommand implements EditorCommand {
     @Override
     public void execute() {
         // Use buffer to get content and write to file
-//        FileIOUtil.writeFileAsync(Paths.get(filename), buffer.getLines());
+        FileIOUtil.writeFileAsync(Paths.get(filename), buffer);
     }
 }

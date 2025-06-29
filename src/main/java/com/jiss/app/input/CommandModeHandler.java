@@ -1,14 +1,26 @@
 package com.jiss.app.input;
 
 import com.jiss.app.EditorMode;
+import com.jiss.app.command.CommandFactory;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.TerminalPosition;
+import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+@Component
 public class CommandModeHandler implements KeyInputHandler<CommandContext> {
+
+    private final CommandFactory cfactory_;
+
+    @Autowired
+    CommandModeHandler(CommandFactory factory) {
+        cfactory_ = factory;
+    }
+
     @Override
     public LoopStatus handleTextInput(CommandContext context) throws IOException {
 
@@ -23,6 +35,8 @@ public class CommandModeHandler implements KeyInputHandler<CommandContext> {
         } else if (key.getKeyType() == KeyType.Enter ) {
             processCommand(commandBuffer.toString());
             commandBuffer.setLength(0); // Clear command buffer
+            //After executing the command, we return to normal mode.
+            mode = EditorMode.NORMAL;
         } else if (key.getKeyType() == KeyType.Backspace && pos.getColumn() > 0) {
             commandBuffer.deleteCharAt(pos.getColumn() - 1);
             pos = new TerminalPosition(pos.getColumn() - 1, pos.getRow());
@@ -44,14 +58,18 @@ public class CommandModeHandler implements KeyInputHandler<CommandContext> {
         } else if (command.startsWith("w ")) {
             // Handle write command
             System.out.println("Writing changes to file.");
+            cfactory_.create(command).execute();
             // Implement file writing logic here.
         } else if (command.startsWith("e ")) {
             // Handle write command
             System.out.println("Writing changes to file.");
+            cfactory_.create(command).execute();
             // Implement file reading logic here.
         } else {
             System.out.println("Unknown command: " + command);
         }
+
+
     }
 
 }
