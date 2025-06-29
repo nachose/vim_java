@@ -7,7 +7,6 @@ on:
 
 jobs:
   test-coverage:
-    needs: Code Quality Checks
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
