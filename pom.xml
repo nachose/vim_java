@@ -211,7 +211,7 @@
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-pmd-plugin</artifactId>
-            <version>3.22.0</version>
+            <version>3.27.0</version>
             <configuration>
                 <failOnViolation>false</failOnViolation>
                 <skipEmptyReport>false</skipEmptyReport>
@@ -283,7 +283,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>3.22.0</version>
+        <version>3.27.0</version>
         <configuration>
           <targetJdk>21</targetJdk>
         </configuration>
@@ -324,7 +324,7 @@
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-pmd-plugin</artifactId>
-      <version>3.22.0</version>
+      <version>3.27.0</version>
       <reportSets>
         <reportSet>
           <reports>
