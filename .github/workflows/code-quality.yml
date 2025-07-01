@@ -19,7 +19,7 @@ jobs:
       - name: Run Checkstyle
         run: mvn checkstyle:checkstyle
       - name: Run PMD
-        run: mvn checkstyle:check
+        run: mvn pmd:check
       - name: Run PMD CPD
         run: mvn pmd:cpd-check
 
