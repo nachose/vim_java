@@ -37,6 +37,8 @@ public class CommandModeHandler implements KeyInputHandler<CommandContext> {
             commandBuffer.setLength(0); // Clear command buffer
             //After executing the command, we return to normal mode.
             mode = EditorMode.NORMAL;
+            //Set at 0,0 position for now.
+            pos = new TerminalPosition(0, 0);
         } else if (key.getKeyType() == KeyType.Backspace && pos.getColumn() > 0) {
             commandBuffer.deleteCharAt(pos.getColumn() - 1);
             pos = new TerminalPosition(pos.getColumn() - 1, pos.getRow());

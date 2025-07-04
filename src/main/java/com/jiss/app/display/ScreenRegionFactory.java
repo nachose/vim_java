@@ -22,7 +22,7 @@ public class ScreenRegionFactory {
         ArrayList<ScreenRegion> thisList = new ArrayList<>();
 
         thisList.add(new StatusLineRegion(statusRegion));
-        thisList.add(new CommandLineRegion(commandRegion));
+        thisList.add(new CommandLineRegion(commandRegion, new StringBuilder()));
         thisList.add(new BufferRegion(bufferRegion));
 
         return thisList;
@@ -41,7 +41,7 @@ public class ScreenRegionFactory {
         ArrayList<ScreenRegion> thisList = new ArrayList<>();
 
         thisList.add(new StatusLineRegion(statusRegion));
-        thisList.add(new CommandLineRegion(commandRegion));
+        thisList.add(new CommandLineRegion(commandRegion, new StringBuilder()));
         thisList.add(new BufferRegion(bufferRegion));
 
         return thisList;

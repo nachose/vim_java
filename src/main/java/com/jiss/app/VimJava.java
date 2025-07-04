@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.jiss.app.display.ScreenRegion;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import com.jiss.app.display.Region;
 
 
 
@@ -30,7 +31,12 @@ public class VimJava {
 
     public VimJava (Screen screen) {
         this.screen_ = screen;
-        regions_ = ScreenRegionFactory.createRegions(screen);
+        Region screenRegion = new Region("screen",
+                                         0,
+                                         0,
+                                         screen.getTerminalSize().getColumns(),
+                                         screen.getTerminalSize().getRows());
+        regions_ = ScreenRegionFactory.createRegions(screenRegion);
 
         buffer_ = new ArrayList<String>();
         handler_ = new KeyHandler(buffer_);
@@ -63,16 +69,18 @@ public class VimJava {
                         commandBuffer,
                         counter.getFps());
                 vj.drawRegions(screen, context);
+                vj.drawCursor(screenStatus);
 
                 // Example usage in main loop
                 counter.increment();
 
-                vj.drawCursor(screenStatus);
+
 
                 vj.refreshScreen();
 
                 LoopStatus status = vj.handleTextInput(screenStatus, commandBuffer);
                 running = status.mode() != EditorMode.STOPPED;
+                screenStatus.setPosition(status.pos());
                 mode = status.mode();
             }
             screen.stopScreen();
@@ -81,6 +89,7 @@ public class VimJava {
     }
 
     private void drawCursor(ScreenStatus screenStatus) {
+
         screenStatus.updatePostion();
     }
 
@@ -115,6 +124,7 @@ public class VimJava {
         for (ScreenRegion region : regions_) {
             region.draw(context);
         }
+
     }
 
 

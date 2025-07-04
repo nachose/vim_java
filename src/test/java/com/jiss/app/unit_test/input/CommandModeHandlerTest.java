@@ -71,7 +71,7 @@ class CommandModeHandlerTest {
         LoopStatus status = handler.handleTextInput(context);
 
         assertEquals("", commandBuffer.toString());
-        assertEquals(EditorMode.COMMAND, status.mode());
+        assertEquals(EditorMode.NORMAL, status.mode());
         assertEquals(pos, status.pos());
     }
 

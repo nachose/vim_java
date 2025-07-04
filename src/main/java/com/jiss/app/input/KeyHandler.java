@@ -57,7 +57,7 @@ public class KeyHandler {
         LoopStatus status = handler.handleTextInput(context_);
 
         mode_ = status.mode();
-        screen.setPosition(status.pos());
+        //screen.setPosition(status.pos());
 
         return status;
 
