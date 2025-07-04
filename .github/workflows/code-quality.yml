@@ -22,22 +22,24 @@ jobs:
         run: mvn pmd:check
       - name: Run PMD CPD
         run: mvn pmd:cpd-check
+      - name: Generate HTML files
+        run: mvn site
 
       - name: Upload PMD report
         uses: actions/upload-artifact@v4
         with:
           name: pmd-report
-          path: target/pmd.xml
+          path: target/site/pmd.html
       - name: Upload Checkstyle report
         uses: actions/upload-artifact@v4
         with:
           name: checkstyle-result
-          path: target/checkstyle-result.xml
+          path: target/site/checkstyle.html
       - name: Upload CPD report
         uses: actions/upload-artifact@v4
         with:
           name: cpd-report
-          path: target/cpd.xml
+          path: target/site/cpd.html
       - name: Display PMD report
         run: cat target/pmd.xml
       - name: Display CPD report
