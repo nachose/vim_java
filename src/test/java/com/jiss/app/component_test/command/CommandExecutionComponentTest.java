@@ -31,7 +31,7 @@ class CommandExecutionComponentTest {
     void testWriteCommand() throws Exception {
         EditorCommand writeCmd = factory.create("w " + tempFile.toString());
         assertNotNull(writeCmd);
-        writeCmd.execute();
+        writeCmd.executeSync();
 
         List<String> fileLines = Files.readAllLines(tempFile);
         assertEquals(buffer, fileLines);
@@ -45,7 +45,7 @@ class CommandExecutionComponentTest {
         buffer.clear();
         EditorCommand readCmd = factory.create("e " + tempFile.toString());
         assertNotNull(readCmd);
-        readCmd.execute();
+        readCmd.executeSync();
 
         assertEquals(lines, buffer);
     }

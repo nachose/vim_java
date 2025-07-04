@@ -39,6 +39,7 @@ public class FileIOUtil {
                 Future<Integer> result = channel.write(buffer, 0);
                 result.get();
             } catch (Exception e) {
+                System.out.println("Error writing to file: " + e.getMessage());
                 throw new RuntimeException(e);
             }
         });

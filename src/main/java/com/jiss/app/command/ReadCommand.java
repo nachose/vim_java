@@ -22,4 +22,18 @@ public class ReadCommand implements EditorCommand {
             return null;
         });
     }
+    @Override
+    public void executeSync() {
+        try {
+            FileIOUtil.readFileAsync(Paths.get(filename)).thenAccept(lines -> {
+                buffer.addAll(lines);
+            }).exceptionally(ex -> {
+                // Handle error (e.g., notify user)
+                return null;
+            }).get();
+        } catch (java.lang.InterruptedException | java.util.concurrent.ExecutionException e) {
+            // Handle exceptions
+            e.printStackTrace();
+        }
+    }
 }
