@@ -15,12 +15,21 @@ public class WriteCommand implements EditorCommand {
         this.filename = filename;
     }
 
+//    @Override
+//    public void execute() {
+//        // Use buffer to get content and write to file
+//        FileIOUtil.writeFileAsync(Paths.get(filename), buffer);
+//    }
+
     @Override
     public void execute() {
-        // Use buffer to get content and write to file
-        FileIOUtil.writeFileAsync(Paths.get(filename), buffer);
+        FileIOUtil.writeFileStreamingAsync(
+                Paths.get(filename),
+                buffer.stream(),
+                ex -> { /* handle error, e.g., log or show message */ },
+                () -> { /* on complete, e.g., notify user */ }
+        );
     }
-
     @Override
     public void executeSync() {
         try {

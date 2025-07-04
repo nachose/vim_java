@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+import java.util.function.Consumer;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.util.stream.Stream;
 
 public class FileIOUtil {
 
@@ -30,6 +34,24 @@ public class FileIOUtil {
         });
     }
 
+    public static void readFileStreamingAsync(
+            Path path,
+            Consumer<String> onLine,
+            Consumer<Throwable> onError,
+            Runnable onComplete) {
+        CompletableFuture.runAsync(() -> {
+            try (BufferedReader reader = Files.newBufferedReader(path)) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    onLine.accept(line);
+                }
+                onComplete.run();
+            } catch (Throwable t) {
+                onError.accept(t);
+            }
+        });
+    }
+
     public static CompletableFuture<Void> writeFileAsync(Path path, List<String> lines) {
         return CompletableFuture.runAsync(() -> {
             try (AsynchronousFileChannel channel = AsynchronousFileChannel.open(
@@ -41,6 +63,29 @@ public class FileIOUtil {
             } catch (Exception e) {
                 System.out.println("Error writing to file: " + e.getMessage());
                 throw new RuntimeException(e);
+            }
+        });
+    }
+
+    public static CompletableFuture<Void> writeFileStreamingAsync(
+            Path path,
+            Stream<String> lines,
+            Consumer<Throwable> onError,
+            Runnable onComplete) {
+        return CompletableFuture.runAsync(() -> {
+            try (BufferedWriter writer = Files.newBufferedWriter(
+                    path, StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
+                lines.forEach(line -> {
+                    try {
+                        writer.write(line);
+                        writer.newLine();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                onComplete.run();
+            } catch (Throwable t) {
+                onError.accept(t);
             }
         });
     }

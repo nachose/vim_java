@@ -7,8 +7,9 @@ import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.TextCharacter;
 import com.googlecode.lanterna.TerminalPosition;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.List;
+
 import com.jiss.app.display.ScreenRegion;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import com.jiss.app.display.Region;
@@ -27,7 +28,7 @@ public class VimJava {
     private KeyHandler handler_ = null;
     private List<ScreenRegion> regions_ = null;
     private Screen screen_ = null;
-    private ArrayList<String> buffer_ = null;
+    private List<String> buffer_ = null;
 
     public VimJava (Screen screen) {
         this.screen_ = screen;
@@ -38,7 +39,7 @@ public class VimJava {
                                          screen.getTerminalSize().getRows());
         regions_ = ScreenRegionFactory.createRegions(screenRegion);
 
-        buffer_ = new ArrayList<String>();
+        buffer_ = new CopyOnWriteArrayList<>();
         handler_ = new KeyHandler(buffer_);
 
         //Continue removing buffer instances and pushing it into handler_

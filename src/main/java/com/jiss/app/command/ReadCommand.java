@@ -13,6 +13,7 @@ public class ReadCommand implements EditorCommand {
         this.filename = filename;
     }
 
+    /*
     @Override
     public void execute() {
         FileIOUtil.readFileAsync(Paths.get(filename)).thenAccept(lines -> {
@@ -21,6 +22,17 @@ public class ReadCommand implements EditorCommand {
             // Handle error (e.g., notify user)
             return null;
         });
+    }
+    */
+
+    @Override
+    public void execute() {
+        FileIOUtil.readFileStreamingAsync(
+                Paths.get(filename),
+                buffer::add,
+                ex -> { /* handle error */ },
+                () -> { /* on complete */ }
+        );
     }
     @Override
     public void executeSync() {
