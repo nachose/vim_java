@@ -263,7 +263,14 @@
         <configuration>
           <source>21</source>
           <target>21</target>
-          <compilerArgs>--enable-preview</compilerArgs>
+          <compilerArgs>
+            <arg>
+              --enable-preview
+            </arg>
+            <arg>
+               -Xlint:unchecked
+            </arg>
+          </compilerArgs>
         </configuration>
       </plugin>
       <plugin>
